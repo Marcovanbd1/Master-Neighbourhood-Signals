@@ -3,8 +3,8 @@
 <head>
   <meta charset="utf-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1" />
-  <title>Neighbourhood Signals, The Public Neighbourhood Brief</title>
-  <meta name="description" content="The Public Neighbourhood Brief is the civic artefact that turns listening into shared action, without personal data." />
+  <title>Neighbourhood Signals, Public Brief</title>
+  <meta name="description" content="The Neighbourhood Brief is a short public artefact that turns aggregated signals into a readable view of need, with safety and governance built in." />
   <style>
     :root{
       --bg: #0b0f14;
@@ -19,131 +19,535 @@
       --radius2: 26px;
       --max: 1100px;
       --pad: clamp(18px, 2.6vw, 28px);
+      --focus: rgba(140,255,210,0.55);
     }
 
     *{ box-sizing: border-box; }
+    html, body{ height: 100%; }
     body{
       margin: 0;
-      font-family: system-ui, -apple-system, Segoe UI, Roboto, Helvetica, Arial;
+      font-family: ui-sans-serif, system-ui, -apple-system, Segoe UI, Roboto, Helvetica, Arial, "Apple Color Emoji", "Segoe UI Emoji";
       color: var(--text);
-      background: linear-gradient(180deg, #070a0f, #0b0f14);
+      background:
+        radial-gradient(1200px 700px at 12% 8%, rgba(120,150,255,0.18), transparent 60%),
+        radial-gradient(1000px 650px at 85% 22%, rgba(140,255,210,0.12), transparent 60%),
+        radial-gradient(900px 600px at 55% 95%, rgba(255,170,90,0.10), transparent 60%),
+        linear-gradient(180deg, #070a0f 0%, #0b0f14 55%, #070a0f 100%);
+      line-height: 1.5;
     }
+
     a{ color: inherit; text-decoration: none; }
-    .wrap{ max-width: var(--max); margin: 0 auto; padding: 0 var(--pad); }
-    section{ padding: 24px 0; }
-    .grid{ display: grid; grid-template-columns: repeat(12,1fr); gap: 14px; }
+    a:hover{ text-decoration: underline; }
+    a:focus-visible{
+      outline: 2px solid var(--focus);
+      outline-offset: 3px;
+      border-radius: 10px;
+    }
+
+    .wrap{
+      max-width: var(--max);
+      margin: 0 auto;
+      padding: 0 var(--pad);
+    }
+
+    .skip{
+      position: absolute;
+      left: -999px;
+      top: 12px;
+      background: rgba(0,0,0,0.65);
+      border: 1px solid rgba(255,255,255,0.18);
+      color: var(--text);
+      padding: 10px 12px;
+      border-radius: 12px;
+      z-index: 999;
+    }
+    .skip:focus{ left: 12px; }
+
+    /* Top bar */
+    .topbar{
+      position: sticky;
+      top: 0;
+      z-index: 30;
+      backdrop-filter: blur(12px);
+      background: linear-gradient(180deg, rgba(11,15,20,0.78) 0%, rgba(11,15,20,0.58) 100%);
+      border-bottom: 1px solid var(--line);
+    }
+    .topbar-inner{
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: 14px;
+      padding: 12px 0;
+    }
+    .brand{
+      display: flex;
+      align-items: center;
+      gap: 10px;
+      min-width: 220px;
+    }
+    .mark{
+      width: 34px;
+      height: 34px;
+      border-radius: 12px;
+      background: linear-gradient(135deg, rgba(255,255,255,0.18), rgba(255,255,255,0.06));
+      border: 1px solid var(--line);
+      box-shadow: var(--shadow);
+      display: grid;
+      place-items: center;
+      font-weight: 700;
+      color: rgba(255,255,255,0.85);
+    }
+    .brand h1{
+      margin: 0;
+      font-size: 14px;
+      letter-spacing: 0.2px;
+      font-weight: 650;
+    }
+    .brand p{
+      margin: 0;
+      font-size: 12px;
+      color: var(--muted);
+    }
+
+    .nav{
+      display: flex;
+      gap: 10px;
+      flex-wrap: wrap;
+      justify-content: flex-end;
+    }
+    .nav a{
+      font-size: 13px;
+      color: var(--muted);
+      padding: 8px 10px;
+      border-radius: 12px;
+      border: 1px solid transparent;
+      white-space: nowrap;
+    }
+    .nav a:hover{
+      background: rgba(255,255,255,0.06);
+      border-color: rgba(255,255,255,0.10);
+      text-decoration: none;
+      color: var(--text);
+    }
+    .nav a.active,
+    .nav a[aria-current="page"]{
+      background: rgba(255,255,255,0.08);
+      border-color: rgba(255,255,255,0.14);
+      color: var(--text);
+    }
+
+    section{ padding: 22px 0; }
+
+    .grid{
+      display: grid;
+      grid-template-columns: repeat(12, minmax(0, 1fr));
+      gap: 14px;
+    }
+    .span-8{ grid-column: span 8; }
     .span-7{ grid-column: span 7; }
+    .span-6{ grid-column: span 6; }
     .span-5{ grid-column: span 5; }
+    .span-4{ grid-column: span 4; }
     .span-12{ grid-column: span 12; }
+
+    .card{
+      background: linear-gradient(180deg, rgba(255,255,255,0.08) 0%, rgba(255,255,255,0.05) 100%);
+      border: 1px solid rgba(255,255,255,0.12);
+      border-radius: var(--radius2);
+      box-shadow: var(--shadow);
+      overflow: hidden;
+    }
+    .card-inner{ padding: 26px; }
+
     .block{
       background: rgba(255,255,255,0.05);
       border: 1px solid rgba(255,255,255,0.12);
       border-radius: var(--radius2);
-      padding: 22px;
+      padding: 20px;
       box-shadow: var(--shadow);
     }
-    h1{ margin:0 0 10px; font-size: clamp(28px,3vw,42px); }
-    h3{ margin:0 0 8px; }
-    p{ color: var(--muted); font-size: 14px; }
-    .callout{ border-left:3px solid rgba(140,255,210,.5); padding-left:12px; margin-top:12px; }
+    h2{
+      margin: 0 0 10px;
+      font-size: clamp(28px, 3.2vw, 44px);
+      line-height: 1.08;
+      letter-spacing: -0.6px;
+    }
+    .block h3{
+      margin: 0 0 8px;
+      font-size: 18px;
+      letter-spacing: -0.2px;
+    }
+    .block p{
+      margin: 0 0 10px;
+      color: var(--muted);
+      font-size: 14px;
+    }
+    .muted{ color: var(--muted); }
 
-    @media(max-width:840px){
-      .span-7,.span-5{ grid-column: span 12; }
+    .eyebrow{
+      display: inline-flex;
+      gap: 8px;
+      align-items: center;
+      font-size: 12px;
+      letter-spacing: 0.28px;
+      text-transform: uppercase;
+      color: rgba(255,255,255,0.70);
+      margin-bottom: 10px;
+    }
+    .dot{
+      width: 8px; height: 8px; border-radius: 999px;
+      background: rgba(140,255,210,0.75);
+      box-shadow: 0 0 0 4px rgba(140,255,210,0.12);
+    }
+
+    .btn{
+      display: inline-flex;
+      align-items: center;
+      gap: 10px;
+      padding: 10px 14px;
+      border-radius: 14px;
+      border: 1px solid rgba(255,255,255,0.14);
+      background: rgba(255,255,255,0.08);
+      color: var(--text);
+      font-size: 14px;
+      font-weight: 600;
+      text-decoration: none;
+    }
+    .btn:hover{ background: rgba(255,255,255,0.11); text-decoration: none; }
+    .btn.primary{
+      background: rgba(140,255,210,0.16);
+      border-color: rgba(140,255,210,0.34);
+    }
+    .btn.primary:hover{ background: rgba(140,255,210,0.20); }
+
+    .hero-actions{
+      display: flex;
+      flex-wrap: wrap;
+      gap: 10px;
+      margin-top: 14px;
+    }
+
+    .callout{
+      border-left: 3px solid rgba(140,255,210,0.55);
+      padding-left: 12px;
+      margin-top: 12px;
+      color: rgba(255,255,255,0.84);
+      font-size: 14px;
+    }
+
+    .list{
+      margin: 0;
+      padding: 0;
+      list-style: none;
+      display: grid;
+      gap: 10px;
+      margin-top: 12px;
+    }
+    .item{
+      border-radius: var(--radius);
+      border: 1px solid rgba(255,255,255,0.12);
+      background: rgba(255,255,255,0.05);
+      padding: 12px;
+    }
+    .k{
+      display:flex;
+      align-items:center;
+      justify-content:space-between;
+      gap: 10px;
+      font-size: 13px;
+      font-weight: 650;
+      color: rgba(255,255,255,0.88);
+    }
+    .v{
+      margin-top: 6px;
+      color: var(--muted);
+      font-size: 12px;
+    }
+    .tag{
+      font-size: 11px;
+      color: rgba(255,255,255,0.78);
+      padding: 4px 8px;
+      border-radius: 999px;
+      border: 1px solid rgba(255,255,255,0.14);
+      background: rgba(255,255,255,0.05);
+      white-space: nowrap;
+    }
+
+    footer{
+      padding: 26px 0 44px;
+      border-top: 1px solid var(--line);
+      margin-top: 26px;
+      color: var(--faint);
+      font-size: 13px;
+    }
+    .foot{
+      display: flex;
+      gap: 18px;
+      flex-wrap: wrap;
+      align-items: center;
+      justify-content: space-between;
+    }
+    .foot a{ color: var(--muted); }
+    .foot a:hover{ color: var(--text); text-decoration: none; }
+
+    @media (max-width: 920px){
+      .brand{ min-width: auto; }
+    }
+    @media (max-width: 840px){
+      .span-8, .span-7, .span-6, .span-5, .span-4{ grid-column: span 12; }
+      .nav{ justify-content: flex-start; }
     }
   </style>
 </head>
 
 <body>
+  <a class="skip" href="#content">Skip to content</a>
 
-<main>
+  <header class="topbar">
+    <div class="wrap">
+      <div class="topbar-inner">
+        <a class="brand" href="index.html" aria-label="Neighbourhood Signals home">
+          <div class="mark" aria-hidden="true">NS</div>
+          <div>
+            <h1>Neighbourhood Signals</h1>
+            <p>Public listening, safe by design</p>
+          </div>
+        </a>
 
-<section>
-  <div class="wrap">
-    <div class="block span-12">
-      <h1>The Public Neighbourhood Brief</h1>
-      <p>
-        The Brief is the civic artefact that turns listening into shared responsibility.
-        It is written for humans, published for the neighbourhood, and trusted by commissioners.
-      </p>
-      <div class="callout">
-        It is not a dashboard. It is a public mirror.
+        <nav class="nav" aria-label="Primary">
+          <a href="index.html">Home</a>
+          <a href="sprint.html">30-day sprint</a>
+          <a class="active" aria-current="page" href="brief.html">Public Brief</a>
+          <a href="colours.html">Colours</a>
+          <a href="safety.html">Safety</a>
+          <a href="governance.html">Ethics and governance</a>
+          <a href="commissioning.html">Commissioning</a>
+          <a href="demo-brief.html">Demo Brief</a>
+          <a href="faqs.html">FAQs</a>
+          <a href="contact.html">Contact</a>
+        </nav>
       </div>
     </div>
-  </div>
-</section>
+  </header>
 
-<section>
-  <div class="wrap">
-    <div class="grid">
-      <div class="block span-7">
-        <h3>What the Brief is</h3>
-        <p>
-          A short, readable account of what people in a neighbourhood are trying to get help with,
-          how that is shifting, and where loops and friction are forming.
-        </p>
-        <p>
-          It is written with metacognitive humility. Signals are clues, not conclusions.
-        </p>
+  <main id="content">
+    <!-- Hero -->
+    <section>
+      <div class="wrap">
+        <div class="grid">
+          <div class="card span-8">
+            <div class="card-inner">
+              <div class="eyebrow"><span class="dot" aria-hidden="true"></span> A public civic artefact</div>
+              <h2>The Neighbourhood Brief</h2>
+              <p class="muted" style="margin:0 0 12px; font-size: 16px; max-width: 72ch;">
+                A short public document that turns aggregated signals into a readable view of need,
+                written with metacognitive humility and designed to trigger gentle, coordinated action.
+              </p>
+
+              <div class="hero-actions">
+                <a class="btn primary" href="demo-brief.html">See a demo Brief</a>
+                <a class="btn" href="safety.html">Safety by design</a>
+                <a class="btn" href="governance.html">Ethics and governance</a>
+              </div>
+
+              <div class="callout">
+                The Brief is public on purpose. Publicness is not marketing, it is the governance surface.
+              </div>
+            </div>
+          </div>
+
+          <div class="block span-4">
+            <h3>What the Brief contains</h3>
+            <p>A few pages, readable in minutes.</p>
+
+            <ul class="list">
+              <li class="item">
+                <div class="k">Signals that are forming <span class="tag">aggregate</span></div>
+                <div class="v">Patterns in what people are trying to find help with, and how that is changing.</div>
+              </li>
+              <li class="item">
+                <div class="k">Neighbourhood Colours <span class="tag">blinded</span></div>
+                <div class="v">Signal strength without naming areas, until a governed moment of action.</div>
+              </li>
+              <li class="item">
+                <div class="k">Partner actions <span class="tag">practical</span></div>
+                <div class="v">A small set of proportionate responses across NHS, council, VCS, and community.</div>
+              </li>
+              <li class="item">
+                <div class="k">The covenant <span class="tag">visible</span></div>
+                <div class="v">The boundaries that make the system safe are printed on the Brief itself.</div>
+              </li>
+            </ul>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- Why public -->
+    <section>
+      <div class="wrap">
+        <div class="grid">
+          <div class="block span-7">
+            <h3>Why the Brief is public</h3>
+            <p>
+              Publicness is a safety mechanism. It prevents hidden dashboards, private interpretation, and quiet mission creep.
+            </p>
+            <p class="muted">
+              When the Brief is public, everyone can see the same thing, which keeps governance lighter and trust higher.
+              It also makes the work legible to communities, not just institutions.
+            </p>
+
+            <ul class="list">
+              <li class="item">
+                <div class="k">No private dashboards <span class="tag">by design</span></div>
+                <div class="v">If the only view is a private analytics tool, interpretation drifts and accountability weakens.</div>
+              </li>
+              <li class="item">
+                <div class="k">Shared reality <span class="tag">partners</span></div>
+                <div class="v">NHS, council, and VCS can coordinate because they are reading the same artefact.</div>
+              </li>
+              <li class="item">
+                <div class="k">Visible boundaries <span class="tag">covenant</span></div>
+                <div class="v">The public can see what is included, what is excluded, and what will never be done.</div>
+              </li>
+            </ul>
+
+            <div class="callout">
+              If something cannot be safely public, it is usually not a Neighbourhood Signal.
+            </div>
+          </div>
+
+          <div class="block span-5">
+            <h3>What “public” does not mean</h3>
+            <p>It does not mean revealing people or places.</p>
+            <ul class="list">
+              <li class="item">
+                <div class="k">No personal data <span class="tag">ever</span></div>
+                <div class="v">No identities, addresses, demographics, or anything that can profile an individual.</div>
+              </li>
+              <li class="item">
+                <div class="k">No stigmatising neighbourhoods <span class="tag">blinded</span></div>
+                <div class="v">Colours mask geography until action is necessary, then unblinding happens under governance.</div>
+              </li>
+              <li class="item">
+                <div class="k">No overclaiming <span class="tag">humility</span></div>
+                <div class="v">Signals are clues. The Brief distinguishes “what we see” from “what we think it might mean”.</div>
+              </li>
+            </ul>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- Structure -->
+    <section>
+      <div class="wrap">
+        <div class="grid">
+          <div class="block span-7">
+            <h3>Suggested structure</h3>
+            <p>A consistent template helps partners read quickly, and stops drift.</p>
+
+            <ul class="list">
+              <li class="item">
+                <div class="k">1. The covenant <span class="tag">front page</span></div>
+                <div class="v">What this is, what it is demonstrated from, and the hard boundaries.</div>
+              </li>
+              <li class="item">
+                <div class="k">2. Live signals <span class="tag">changes</span></div>
+                <div class="v">What is rising, falling, emerging, or persisting, with plain language and no drama.</div>
+              </li>
+              <li class="item">
+                <div class="k">3. Neighbourhood Colours <span class="tag">blinded</span></div>
+                <div class="v">Signal bands that allow discussion without naming geography too early.</div>
+              </li>
+              <li class="item">
+                <div class="k">4. Partner actions <span class="tag">gentle</span></div>
+                <div class="v">A small menu of things partners can do this week, with owners and time horizons.</div>
+              </li>
+              <li class="item">
+                <div class="k">5. Notes and limitations <span class="tag">humility</span></div>
+                <div class="v">What may be noise, what needs human verification, and what we are not claiming.</div>
+              </li>
+            </ul>
+          </div>
+
+          <div class="block span-5">
+            <h3>Cadence</h3>
+            <p>Choose a rhythm you can sustain.</p>
+
+            <ul class="list">
+              <li class="item">
+                <div class="k">Sprint output <span class="tag">day 30</span></div>
+                <div class="v">One first Brief. The purpose is evidence, not perfection.</div>
+              </li>
+              <li class="item">
+                <div class="k">Fortnightly <span class="tag">responsive</span></div>
+                <div class="v">Best when conditions are changing fast, and partner actions are active.</div>
+              </li>
+              <li class="item">
+                <div class="k">Monthly <span class="tag">steady</span></div>
+                <div class="v">Best for sustainability and governance, without losing signal.</div>
+              </li>
+            </ul>
+
+            <div class="hero-actions">
+              <a class="btn" href="demo-brief.html">View demo Brief</a>
+              <a class="btn" href="commissioning.html">Commissioning</a>
+            </div>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- CTA band -->
+    <section>
+      <div class="wrap">
+        <div class="card">
+          <div class="card-inner">
+            <div class="grid" style="align-items:center;">
+              <div class="span-7">
+                <h3 style="margin:0 0 8px; font-size: 20px;">The Brief is the unit of trust.</h3>
+                <p style="margin:0; color: var(--muted); font-size: 14px;">
+                  If a commissioner can read the Brief, they can understand what they are buying, how it stays safe,
+                  and what a “response” actually looks like.
+                </p>
+              </div>
+              <div class="span-5" style="display:flex; gap:10px; flex-wrap:wrap; justify-content:flex-end;">
+                <a class="btn primary" href="commissioning.html">How commissioning works</a>
+                <a class="btn" href="sprint.html">Start with a sprint</a>
+                <a class="btn" href="contact.html">Contact</a>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </section>
+  </main>
+
+  <footer>
+    <div class="wrap">
+      <div class="foot">
+        <div>
+          <strong style="color: rgba(255,255,255,0.82);">Neighbourhood Signals</strong><br />
+          <span>Public listening, civic coordination, safe by design.</span>
+        </div>
+        <div style="display:flex; gap:12px; flex-wrap:wrap;">
+          <a href="index.html">Home</a>
+          <a href="safety.html">Safety</a>
+          <a href="governance.html">Ethics and governance</a>
+          <a href="commissioning.html">Commissioning</a>
+          <a href="contact.html">Contact</a>
+        </div>
       </div>
 
-      <div class="block span-5">
-        <h3>What the Brief is not</h3>
-        <p>It does not identify people. It does not label communities. It does not rank neighbourhoods.</p>
-        <p>It never contains personal data or inferred identities.</p>
+      <div style="margin-top: 16px; color: rgba(255,255,255,0.45); font-size: 12px;">
+        © <span id="year"></span> Neighbourhood Signals.
       </div>
     </div>
-  </div>
-</section>
+  </footer>
 
-<section>
-  <div class="wrap">
-    <div class="grid">
-      <div class="block span-7">
-        <h3>Why the Brief is public</h3>
-        <p>
-          Publicness is a safety mechanism. It prevents private interpretation,
-          hidden dashboards, and quiet mission creep.
-        </p>
-        <p>
-          When everyone reads the same Brief, coordination replaces duplication.
-        </p>
-      </div>
-
-      <div class="block span-5">
-        <h3>What it creates</h3>
-        <p>A shared civic question:</p>
-        <p><strong>“Who is responsible for responding to what our neighbourhood is telling us?”</strong></p>
-      </div>
-    </div>
-  </div>
-</section>
-
-<section>
-  <div class="wrap">
-    <div class="block span-12">
-      <h3>What the Brief contains</h3>
-      <p>• What is forming (signals)<br>
-         • How patterns are shifting<br>
-         • Where loops and friction appear<br>
-         • Suggested partner responses<br>
-         • A clear “what happens next”</p>
-    </div>
-  </div>
-</section>
-
-<section>
-  <div class="wrap">
-    <div class="block span-12">
-      <h3>What happens after publication</h3>
-      <p>
-        The Brief becomes the commissioning artefact.
-        Not a slide deck. Not a pilot report.
-        A living civic reference point.
-      </p>
-    </div>
-  </div>
-</section>
-
-</main>
+  <script>
+    document.getElementById("year").textContent = new Date().getFullYear();
+  </script>
 </body>
 </html>
