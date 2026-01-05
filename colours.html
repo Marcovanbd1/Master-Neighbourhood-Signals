@@ -1,0 +1,451 @@
+<!doctype html>
+<html lang="en-GB">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>Neighbourhood Signals, Neighbourhood Colours</title>
+  <meta name="description" content="Neighbourhood Colours are a blinding layer. They keep interpretation blind to place until a governed moment of action, preventing stigma and deficit narratives." />
+  <style>
+    :root{
+      --bg: #0b0f14;
+      --panel: rgba(255,255,255,0.06);
+      --panel2: rgba(255,255,255,0.09);
+      --text: rgba(255,255,255,0.92);
+      --muted: rgba(255,255,255,0.70);
+      --faint: rgba(255,255,255,0.55);
+      --line: rgba(255,255,255,0.14);
+      --shadow: 0 10px 30px rgba(0,0,0,0.35);
+      --radius: 18px;
+      --radius2: 26px;
+      --max: 1100px;
+      --pad: clamp(18px, 2.6vw, 28px);
+    }
+    *{ box-sizing:border-box; }
+    body{
+      margin:0;
+      font-family: ui-sans-serif, system-ui, -apple-system, Segoe UI, Roboto, Helvetica, Arial;
+      color: var(--text);
+      background:
+        radial-gradient(1200px 700px at 12% 8%, rgba(120,150,255,0.18), transparent 60%),
+        radial-gradient(1000px 650px at 85% 22%, rgba(140,255,210,0.12), transparent 60%),
+        radial-gradient(900px 600px at 55% 95%, rgba(255,170,90,0.10), transparent 60%),
+        linear-gradient(180deg, #070a0f 0%, #0b0f14 55%, #070a0f 100%);
+      line-height: 1.5;
+    }
+    a{ color: inherit; text-decoration:none; }
+    a:hover{ text-decoration: underline; }
+    .wrap{ max-width: var(--max); margin:0 auto; padding: 0 var(--pad); }
+
+    /* Top bar */
+    .topbar{
+      position: sticky; top:0; z-index:30;
+      backdrop-filter: blur(12px);
+      background: linear-gradient(180deg, rgba(11,15,20,0.78) 0%, rgba(11,15,20,0.58) 100%);
+      border-bottom: 1px solid var(--line);
+    }
+    .topbar-inner{
+      display:flex; align-items:center; justify-content:space-between;
+      gap:14px; padding:12px 0;
+    }
+    .brand{ display:flex; align-items:center; gap:10px; min-width:220px; }
+    .mark{
+      width:34px; height:34px; border-radius:12px;
+      background: linear-gradient(135deg, rgba(255,255,255,0.18), rgba(255,255,255,0.06));
+      border: 1px solid var(--line);
+      box-shadow: var(--shadow);
+      display:grid; place-items:center;
+      font-weight:700; color: rgba(255,255,255,0.85);
+    }
+    .brand h1{ margin:0; font-size:14px; letter-spacing:0.2px; font-weight:650; }
+    .brand p{ margin:0; font-size:12px; color: var(--muted); }
+
+    .nav{ display:flex; gap:10px; flex-wrap:wrap; justify-content:flex-end; }
+    .nav a{
+      font-size:13px; color: var(--muted);
+      padding: 8px 10px; border-radius: 12px;
+      border: 1px solid transparent;
+    }
+    .nav a:hover{
+      background: rgba(255,255,255,0.06);
+      border-color: rgba(255,255,255,0.10);
+      text-decoration:none; color: var(--text);
+    }
+    .nav a.active{
+      background: rgba(255,255,255,0.08);
+      border-color: rgba(255,255,255,0.14);
+      color: var(--text);
+    }
+
+    /* Layout blocks */
+    section{ padding: 22px 0; }
+    .grid{ display:grid; grid-template-columns: repeat(12, minmax(0,1fr)); gap: 14px; }
+    .span-7{ grid-column: span 7; }
+    .span-5{ grid-column: span 5; }
+    .span-12{ grid-column: span 12; }
+
+    .card{
+      background: linear-gradient(180deg, rgba(255,255,255,0.08) 0%, rgba(255,255,255,0.05) 100%);
+      border: 1px solid rgba(255,255,255,0.12);
+      border-radius: var(--radius2);
+      box-shadow: var(--shadow);
+      overflow:hidden;
+    }
+    .card-inner{ padding: 26px; }
+
+    .block{
+      background: rgba(255,255,255,0.05);
+      border: 1px solid rgba(255,255,255,0.12);
+      border-radius: var(--radius2);
+      padding: 20px;
+      box-shadow: var(--shadow);
+    }
+    .eyebrow{
+      display:inline-flex; gap:8px; align-items:center;
+      font-size:12px; letter-spacing:0.28px; text-transform: uppercase;
+      color: rgba(255,255,255,0.70); margin-bottom:10px;
+    }
+    .dot{
+      width:8px; height:8px; border-radius:999px;
+      background: rgba(140,255,210,0.75);
+      box-shadow: 0 0 0 4px rgba(140,255,210,0.12);
+    }
+    h2{
+      margin:0 0 10px;
+      font-size: clamp(28px, 3.2vw, 44px);
+      line-height:1.08; letter-spacing:-0.6px;
+    }
+    h3{ margin:0 0 8px; font-size:18px; letter-spacing:-0.2px; }
+    p{ margin:0 0 10px; color: var(--muted); font-size:14px; }
+    .muted{ color: var(--muted); }
+
+    .callout{
+      border-left: 3px solid rgba(140,255,210,0.55);
+      padding-left: 12px;
+      margin-top: 12px;
+      color: rgba(255,255,255,0.84);
+      font-size: 14px;
+    }
+
+    .btn{
+      display:inline-flex; align-items:center; gap:10px;
+      padding: 10px 14px; border-radius:14px;
+      border:1px solid rgba(255,255,255,0.14);
+      background: rgba(255,255,255,0.08);
+      color: var(--text);
+      font-size:14px; font-weight:600;
+      text-decoration:none;
+    }
+    .btn:hover{ background: rgba(255,255,255,0.11); text-decoration:none; }
+    .btn.primary{
+      background: rgba(140,255,210,0.16);
+      border-color: rgba(140,255,210,0.34);
+    }
+    .btn.primary:hover{ background: rgba(140,255,210,0.20); }
+    .actions{ display:flex; gap:10px; flex-wrap:wrap; margin-top: 12px; }
+
+    /* Colour cards */
+    .colours{ display:grid; gap: 10px; margin-top: 10px; }
+    .colour{
+      border-radius: 16px;
+      border: 1px solid rgba(255,255,255,0.12);
+      background: rgba(255,255,255,0.05);
+      padding: 14px;
+      display:grid;
+      gap: 6px;
+    }
+    .row{ display:flex; align-items:center; justify-content:space-between; gap:10px; }
+    .badge{
+      font-size: 11px;
+      padding: 4px 8px;
+      border-radius: 999px;
+      border: 1px solid rgba(255,255,255,0.14);
+      background: rgba(255,255,255,0.06);
+      color: rgba(255,255,255,0.86);
+      white-space: nowrap;
+    }
+    .badge.blue{ border-color: rgba(120,150,255,0.36); background: rgba(120,150,255,0.14); }
+    .badge.yellow{ border-color: rgba(255,210,90,0.36); background: rgba(255,210,90,0.14); }
+
+    /* Protocol list */
+    .list{ margin:0; padding:0; list-style:none; display:grid; gap:10px; }
+    .item{
+      border-radius: var(--radius);
+      border: 1px solid rgba(255,255,255,0.12);
+      background: rgba(255,255,255,0.05);
+      padding: 12px;
+    }
+    .k{
+      display:flex; align-items:center; justify-content:space-between; gap:10px;
+      font-size:13px; font-weight:650; color: rgba(255,255,255,0.88);
+    }
+    .v{ margin-top:6px; color: var(--muted); font-size:12px; }
+
+    footer{
+      padding: 26px 0 44px;
+      border-top: 1px solid var(--line);
+      margin-top: 26px;
+      color: var(--faint);
+      font-size: 13px;
+    }
+    .foot{
+      display:flex; gap:18px; flex-wrap:wrap;
+      align-items:center; justify-content:space-between;
+    }
+    .foot a{ color: var(--muted); }
+    .foot a:hover{ color: var(--text); text-decoration:none; }
+
+    @media (max-width: 840px){
+      .span-7, .span-5{ grid-column: span 12; }
+      .nav{ justify-content:flex-start; }
+      .brand{ min-width:auto; }
+    }
+  </style>
+</head>
+
+<body>
+  <header class="topbar">
+    <div class="wrap">
+      <div class="topbar-inner">
+        <a class="brand" href="index.html" aria-label="Neighbourhood Signals home">
+          <div class="mark" aria-hidden="true">NS</div>
+          <div>
+            <h1>Neighbourhood Signals</h1>
+            <p>Public listening, safe by design</p>
+          </div>
+        </a>
+
+        <nav class="nav" aria-label="Primary">
+          <a href="index.html">Home</a>
+          <a href="sprint.html">30-day sprint</a>
+          <a href="brief.html">Public Brief</a>
+          <a class="active" href="colours.html">Colours</a>
+          <a href="safety.html">Safety</a>
+          <a href="governance.html">Ethics and governance</a>
+          <a href="commissioning.html">Commissioning</a>
+          <a href="demo-brief.html">Demo Brief</a>
+          <a href="faqs.html">FAQs</a>
+        </nav>
+      </div>
+    </div>
+  </header>
+
+  <main>
+    <!-- Hero -->
+    <section>
+      <div class="wrap">
+        <div class="card">
+          <div class="card-inner">
+            <div class="eyebrow"><span class="dot" aria-hidden="true"></span> A blinding layer, not a judgement</div>
+            <h2>Neighbourhood Colours</h2>
+            <p style="margin:0; color: var(--muted); font-size: 16px; max-width: 85ch;">
+              Colours are a deliberate blinding layer. They let partners discuss and plan a response to signals
+              while staying blind to which neighbourhood is being referenced. This prevents stigma, deficit narratives,
+              and premature targeting. Colours are never used to label or rank places.
+            </p>
+
+            <div class="callout">
+              Colours keep the order right: signal first, meaning second, action third, and only then location, if location is genuinely required.
+            </div>
+
+            <div class="actions">
+              <a class="btn primary" href="brief.html">How the Brief uses Colours</a>
+              <a class="btn" href="governance.html">Governance and audit</a>
+              <a class="btn" href="safety.html">Safety boundaries</a>
+            </div>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- The Colours -->
+    <section>
+      <div class="wrap">
+        <div class="grid">
+          <div class="block span-5">
+            <h3>The Colours</h3>
+            <p>
+              Colours are not a severity scale. They are a shared convention for discussing signal clusters while geography stays masked.
+            </p>
+
+            <div class="colours" aria-label="Neighbourhood Colours">
+              <div class="colour">
+                <div class="row">
+                  <strong>Neighbourhood Blue</strong>
+                  <span class="badge blue">blind review</span>
+                </div>
+                <p style="margin:0;">
+                  A signal cluster is forming. Enough to discuss meaning, check for loops, and sense-check with partners,
+                  while staying blind to place.
+                </p>
+              </div>
+
+              <div class="colour">
+                <div class="row">
+                  <strong>Neighbourhood Yellow</strong>
+                  <span class="badge yellow">blind planning</span>
+                </div>
+                <p style="margin:0;">
+                  A signal cluster is persistent enough to plan a proportionate response,
+                  still without revealing which neighbourhood it relates to.
+                </p>
+              </div>
+            </div>
+
+            <div class="callout" style="margin-top: 12px;">
+              If a response can be done without knowing where, we stay blinded. Unblinding is a separate governed step, not a colour.
+            </div>
+          </div>
+
+          <div class="block span-7">
+            <h3>What Colours protect against</h3>
+            <p>
+              Place-based insight often collapses into place-based judgement. Colours stop that reflex.
+              They keep interpretation centred on meaning and response, not blame.
+            </p>
+
+            <ul class="list" style="margin-top:12px;">
+              <li class="item">
+                <div class="k">Stigma and deficit narratives <span class="badge">blocked</span></div>
+                <div class="v">“That estate again” thinking is prevented because place is not visible during interpretation.</div>
+              </li>
+              <li class="item">
+                <div class="k">Premature targeting <span class="badge">prevented</span></div>
+                <div class="v">You cannot jump straight to “interventions” without first agreeing what the signal means.</div>
+              </li>
+              <li class="item">
+                <div class="k">Political heat <span class="badge">reduced</span></div>
+                <div class="v">The conversation stays on system response and support, not reputational or punitive framing.</div>
+              </li>
+              <li class="item">
+                <div class="k">Mission creep <span class="badge">contained</span></div>
+                <div class="v">Colours reinforce the rule: signals are clues, not conclusions, and action must be proportionate.</div>
+              </li>
+            </ul>
+
+            <div class="callout">
+              Colours make the system safer, and they make commissioning easier, because the boundaries are built in.
+            </div>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- Unblinding protocol -->
+    <section>
+      <div class="wrap">
+        <div class="grid">
+          <div class="block span-7">
+            <h3>The unblinding protocol</h3>
+            <p>
+              Unblinding is not escalation. It is a practical step taken only when a specific agreed action genuinely requires location.
+              The default position is that geography stays masked.
+            </p>
+
+            <ul class="list" style="margin-top:12px;">
+              <li class="item">
+                <div class="k">Step 1, agree the signal <span class="badge">blind</span></div>
+                <div class="v">Interpret the signal while blinded. Decide if it is meaningful, persistent, and action-relevant.</div>
+              </li>
+              <li class="item">
+                <div class="k">Step 2, define the smallest response <span class="badge">proportionate</span></div>
+                <div class="v">Agree what you can do without location, and what genuinely depends on knowing where.</div>
+              </li>
+              <li class="item">
+                <div class="k">Step 3, unblind for the smallest necessary group <span class="badge">minimal</span></div>
+                <div class="v">Only the people needed to act see the location, and only for the duration needed to act.</div>
+              </li>
+              <li class="item">
+                <div class="k">Step 4, record the act of unblinding <span class="badge">audit</span></div>
+                <div class="v">The fact of unblinding is logged, with purpose, attendees, and what action was agreed.</div>
+              </li>
+            </ul>
+
+            <div class="callout">
+              If you can’t justify unblinding in a single sentence, you don’t do it.
+            </div>
+          </div>
+
+          <div class="block span-5">
+            <h3>Hard boundaries</h3>
+            <p>These are non-negotiable. If an action breaks these, it is not Neighbourhood Signals.</p>
+
+            <ul class="list" style="margin-top:12px;">
+              <li class="item">
+                <div class="k">No targeting individuals <span class="badge">forbidden</span></div>
+                <div class="v">This is never used to identify, track, nudge, or contact individual people.</div>
+              </li>
+              <li class="item">
+                <div class="k">No ranking neighbourhoods <span class="badge">forbidden</span></div>
+                <div class="v">Colours never become league tables, performance scoring, or “problem maps”.</div>
+              </li>
+              <li class="item">
+                <div class="k">No punitive response <span class="badge">forbidden</span></div>
+                <div class="v">Signals trigger support and coordination, not enforcement, blame, or sanctions.</div>
+              </li>
+              <li class="item">
+                <div class="k">No default unblinding <span class="badge">forbidden</span></div>
+                <div class="v">The system does not run in “revealed geography” mode as standard.</div>
+              </li>
+            </ul>
+
+            <div class="actions">
+              <a class="btn primary" href="governance.html">Ethics and governance</a>
+              <a class="btn" href="commissioning.html">Commissioning tiers</a>
+            </div>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- CTA -->
+    <section>
+      <div class="wrap">
+        <div class="card">
+          <div class="card-inner">
+            <div class="grid" style="align-items:center;">
+              <div class="span-7">
+                <h3 style="margin:0 0 8px; font-size: 20px;">Colours keep the system human.</h3>
+                <p style="margin:0; color: var(--muted); font-size: 14px;">
+                  The purpose is not to find “problem places”. It is to hear friction early,
+                  then make support easier to reach, without stigma.
+                </p>
+              </div>
+              <div class="span-5" style="display:flex; gap:10px; flex-wrap:wrap; justify-content:flex-end;">
+                <a class="btn primary" href="demo-brief.html">View demo Brief</a>
+                <a class="btn" href="sprint.html">Run a sprint</a>
+                <a class="btn" href="faqs.html">FAQs</a>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </section>
+
+  </main>
+
+  <footer>
+    <div class="wrap">
+      <div class="foot">
+        <div>
+          <strong style="color: rgba(255,255,255,0.82);">Neighbourhood Signals</strong><br />
+          <span>Public listening, civic coordination, safe by design.</span>
+        </div>
+        <div style="display:flex; gap:12px; flex-wrap:wrap;">
+          <a href="index.html">Home</a>
+          <a href="brief.html">Public Brief</a>
+          <a href="governance.html">Ethics and governance</a>
+          <a href="commissioning.html">Commissioning</a>
+        </div>
+      </div>
+
+      <div style="margin-top: 16px; color: rgba(255,255,255,0.45); font-size: 12px;">
+        © <span id="year"></span> Neighbourhood Signals.
+      </div>
+    </div>
+  </footer>
+
+  <script>
+    document.getElementById("year").textContent = new Date().getFullYear();
+  </script>
+</body>
+</html>
