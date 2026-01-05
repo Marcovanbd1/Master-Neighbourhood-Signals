@@ -4,94 +4,621 @@
   <meta charset="utf-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1" />
   <title>Neighbourhood Signals, Commissioning</title>
-  <meta name="description" content="How to commission Neighbourhood Signals as civic listening infrastructure." />
+  <meta name="description" content="How to commission Neighbourhood Signals as civic listening infrastructure, after a 30-day sprint." />
   <style>
     :root{
-      --bg:#0b0f14; --panel:rgba(255,255,255,.06); --panel2:rgba(255,255,255,.09);
-      --text:rgba(255,255,255,.92); --muted:rgba(255,255,255,.70); --faint:rgba(255,255,255,.55);
-      --line:rgba(255,255,255,.14); --shadow:0 10px 30px rgba(0,0,0,.35);
-      --radius:18px; --radius2:26px; --max:1100px; --pad:clamp(18px,2.6vw,28px);
+      --bg: #0b0f14;
+      --panel: rgba(255,255,255,0.06);
+      --panel2: rgba(255,255,255,0.09);
+      --text: rgba(255,255,255,0.92);
+      --muted: rgba(255,255,255,0.70);
+      --faint: rgba(255,255,255,0.55);
+      --line: rgba(255,255,255,0.14);
+      --shadow: 0 10px 30px rgba(0,0,0,0.35);
+      --radius: 18px;
+      --radius2: 26px;
+      --max: 1100px;
+      --pad: clamp(18px, 2.6vw, 28px);
+      --focus: rgba(140,255,210,0.55);
     }
-    *{box-sizing:border-box}
-    body{margin:0;font-family:system-ui,-apple-system,Segoe UI,Roboto,Helvetica,Arial;color:var(--text);background:linear-gradient(180deg,#070a0f,#0b0f14)}
-    a{color:inherit;text-decoration:none}
-    .wrap{max-width:var(--max);margin:0 auto;padding:0 var(--pad)}
-    section{padding:22px 0}
-    .grid{display:grid;grid-template-columns:repeat(12,1fr);gap:14px}
-    .span-7{grid-column:span 7}
-    .span-5{grid-column:span 5}
-    .span-12{grid-column:span 12}
-    .block{background:rgba(255,255,255,.05);border:1px solid rgba(255,255,255,.12);border-radius:var(--radius2);padding:22px;box-shadow:var(--shadow)}
-    h2{margin:0 0 10px;font-size:clamp(28px,3vw,42px)}
-    h3{margin:0 0 8px}
-    p{color:var(--muted);font-size:14px}
-    .callout{border-left:3px solid rgba(140,255,210,.55);padding-left:12px;margin-top:12px}
 
-    @media(max-width:840px){.span-7,.span-5{grid-column:span 12}}
+    *{ box-sizing: border-box; }
+    html, body{ height: 100%; }
+    body{
+      margin: 0;
+      font-family: ui-sans-serif, system-ui, -apple-system, Segoe UI, Roboto, Helvetica, Arial, "Apple Color Emoji", "Segoe UI Emoji";
+      color: var(--text);
+      background:
+        radial-gradient(1200px 700px at 12% 8%, rgba(120,150,255,0.18), transparent 60%),
+        radial-gradient(1000px 650px at 85% 22%, rgba(140,255,210,0.12), transparent 60%),
+        radial-gradient(900px 600px at 55% 95%, rgba(255,170,90,0.10), transparent 60%),
+        linear-gradient(180deg, #070a0f 0%, #0b0f14 55%, #070a0f 100%);
+      line-height: 1.5;
+    }
+
+    a{ color: inherit; text-decoration: none; }
+    a:hover{ text-decoration: underline; }
+    a:focus-visible{
+      outline: 2px solid var(--focus);
+      outline-offset: 3px;
+      border-radius: 10px;
+    }
+
+    .wrap{
+      max-width: var(--max);
+      margin: 0 auto;
+      padding: 0 var(--pad);
+    }
+
+    .skip{
+      position: absolute;
+      left: -999px;
+      top: 12px;
+      background: rgba(0,0,0,0.65);
+      border: 1px solid rgba(255,255,255,0.18);
+      color: var(--text);
+      padding: 10px 12px;
+      border-radius: 12px;
+      z-index: 999;
+    }
+    .skip:focus{ left: 12px; }
+
+    /* Top bar */
+    .topbar{
+      position: sticky;
+      top: 0;
+      z-index: 30;
+      backdrop-filter: blur(12px);
+      background: linear-gradient(180deg, rgba(11,15,20,0.78) 0%, rgba(11,15,20,0.58) 100%);
+      border-bottom: 1px solid var(--line);
+    }
+    .topbar-inner{
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: 14px;
+      padding: 12px 0;
+    }
+    .brand{
+      display: flex;
+      align-items: center;
+      gap: 10px;
+      min-width: 220px;
+    }
+    .mark{
+      width: 34px;
+      height: 34px;
+      border-radius: 12px;
+      background: linear-gradient(135deg, rgba(255,255,255,0.18), rgba(255,255,255,0.06));
+      border: 1px solid var(--line);
+      box-shadow: var(--shadow);
+      display: grid;
+      place-items: center;
+      font-weight: 700;
+      color: rgba(255,255,255,0.85);
+    }
+    .brand h1{
+      margin: 0;
+      font-size: 14px;
+      letter-spacing: 0.2px;
+      font-weight: 650;
+    }
+    .brand p{
+      margin: 0;
+      font-size: 12px;
+      color: var(--muted);
+    }
+
+    .nav{
+      display: flex;
+      gap: 10px;
+      flex-wrap: wrap;
+      justify-content: flex-end;
+    }
+    .nav a{
+      font-size: 13px;
+      color: var(--muted);
+      padding: 8px 10px;
+      border-radius: 12px;
+      border: 1px solid transparent;
+      white-space: nowrap;
+    }
+    .nav a:hover{
+      background: rgba(255,255,255,0.06);
+      border-color: rgba(255,255,255,0.10);
+      text-decoration: none;
+      color: var(--text);
+    }
+    .nav a.active,
+    .nav a[aria-current="page"]{
+      background: rgba(255,255,255,0.08);
+      border-color: rgba(255,255,255,0.14);
+      color: var(--text);
+    }
+
+    section{ padding: 22px 0; }
+
+    .grid{
+      display: grid;
+      grid-template-columns: repeat(12, minmax(0, 1fr));
+      gap: 14px;
+    }
+    .span-12{ grid-column: span 12; }
+    .span-7{ grid-column: span 7; }
+    .span-6{ grid-column: span 6; }
+    .span-5{ grid-column: span 5; }
+    .span-4{ grid-column: span 4; }
+
+    .card{
+      background: linear-gradient(180deg, rgba(255,255,255,0.08) 0%, rgba(255,255,255,0.05) 100%);
+      border: 1px solid rgba(255,255,255,0.12);
+      border-radius: var(--radius2);
+      box-shadow: var(--shadow);
+      overflow: hidden;
+    }
+    .card-inner{ padding: 26px; }
+
+    .block{
+      background: rgba(255,255,255,0.05);
+      border: 1px solid rgba(255,255,255,0.12);
+      border-radius: var(--radius2);
+      padding: 22px;
+      box-shadow: var(--shadow);
+    }
+
+    h2{
+      margin: 0 0 10px;
+      font-size: clamp(28px, 3.2vw, 44px);
+      line-height: 1.08;
+      letter-spacing: -0.6px;
+    }
+    .block h3{
+      margin: 0 0 8px;
+      font-size: 18px;
+      letter-spacing: -0.2px;
+    }
+    p{ margin: 0 0 10px; color: var(--muted); font-size: 14px; }
+    .muted{ color: var(--muted); }
+
+    .eyebrow{
+      display: inline-flex;
+      gap: 8px;
+      align-items: center;
+      font-size: 12px;
+      letter-spacing: 0.28px;
+      text-transform: uppercase;
+      color: rgba(255,255,255,0.70);
+      margin-bottom: 10px;
+    }
+    .dot{
+      width: 8px; height: 8px; border-radius: 999px;
+      background: rgba(140,255,210,0.75);
+      box-shadow: 0 0 0 4px rgba(140,255,210,0.12);
+    }
+
+    .btn{
+      display: inline-flex;
+      align-items: center;
+      gap: 10px;
+      padding: 10px 14px;
+      border-radius: 14px;
+      border: 1px solid rgba(255,255,255,0.14);
+      background: rgba(255,255,255,0.08);
+      color: var(--text);
+      font-size: 14px;
+      font-weight: 600;
+      text-decoration: none;
+    }
+    .btn:hover{ background: rgba(255,255,255,0.11); text-decoration: none; }
+    .btn.primary{
+      background: rgba(140,255,210,0.16);
+      border-color: rgba(140,255,210,0.34);
+    }
+    .btn.primary:hover{ background: rgba(140,255,210,0.20); }
+
+    .hero-actions{
+      display: flex;
+      flex-wrap: wrap;
+      gap: 10px;
+      margin-top: 14px;
+    }
+
+    .callout{
+      border-left: 3px solid rgba(140,255,210,0.55);
+      padding-left: 12px;
+      margin-top: 12px;
+      color: rgba(255,255,255,0.84);
+      font-size: 14px;
+    }
+
+    .list{
+      margin: 12px 0 0;
+      padding: 0;
+      list-style: none;
+      display: grid;
+      gap: 10px;
+    }
+    .item{
+      border-radius: var(--radius);
+      border: 1px solid rgba(255,255,255,0.12);
+      background: rgba(255,255,255,0.05);
+      padding: 12px;
+    }
+    .k{
+      display:flex;
+      align-items:center;
+      justify-content:space-between;
+      gap: 10px;
+      font-size: 13px;
+      font-weight: 650;
+      color: rgba(255,255,255,0.88);
+    }
+    .v{ margin-top: 6px; color: var(--muted); font-size: 12px; }
+    .tag{
+      font-size: 11px;
+      color: rgba(255,255,255,0.78);
+      padding: 4px 8px;
+      border-radius: 999px;
+      border: 1px solid rgba(255,255,255,0.14);
+      background: rgba(255,255,255,0.05);
+      white-space: nowrap;
+    }
+
+    .tier{
+      border-radius: var(--radius2);
+      border: 1px solid rgba(255,255,255,0.12);
+      background: rgba(255,255,255,0.05);
+      padding: 18px;
+      box-shadow: var(--shadow);
+      display: grid;
+      gap: 10px;
+    }
+    .tier h4{
+      margin: 0;
+      font-size: 16px;
+      letter-spacing: -0.2px;
+      color: rgba(255,255,255,0.92);
+    }
+    .price{
+      font-size: 14px;
+      color: rgba(255,255,255,0.86);
+      font-weight: 700;
+    }
+    .small{
+      font-size: 12px;
+      color: var(--muted);
+    }
+
+    footer{
+      padding: 26px 0 44px;
+      border-top: 1px solid var(--line);
+      margin-top: 26px;
+      color: var(--faint);
+      font-size: 13px;
+    }
+    .foot{
+      display: flex;
+      gap: 18px;
+      flex-wrap: wrap;
+      align-items: center;
+      justify-content: space-between;
+    }
+    .foot a{ color: var(--muted); }
+    .foot a:hover{ color: var(--text); text-decoration: none; }
+
+    @media (max-width: 920px){
+      .brand{ min-width: auto; }
+    }
+    @media (max-width: 840px){
+      .span-7, .span-6, .span-5, .span-4{ grid-column: span 12; }
+      .nav{ justify-content: flex-start; }
+    }
   </style>
 </head>
 
 <body>
-<main>
+  <a class="skip" href="#content">Skip to content</a>
 
-<section>
-  <div class="wrap">
-    <div class="block span-12">
-      <h2>Commissioning Neighbourhood Signals</h2>
-      <p>
-        Neighbourhood Signals is commissioned as civic infrastructure, not as software.
-      </p>
-      <div class="callout">
-        The 30-day sprint produces the evidence. Commissioning is the response.
+  <header class="topbar">
+    <div class="wrap">
+      <div class="topbar-inner">
+        <a class="brand" href="index.html" aria-label="Neighbourhood Signals home">
+          <div class="mark" aria-hidden="true">NS</div>
+          <div>
+            <h1>Neighbourhood Signals</h1>
+            <p>Public listening, safe by design</p>
+          </div>
+        </a>
+
+        <nav class="nav" aria-label="Primary">
+          <a href="index.html">Home</a>
+          <a href="sprint.html">30-day sprint</a>
+          <a href="brief.html">Public Brief</a>
+          <a href="colours.html">Colours</a>
+          <a href="safety.html">Safety</a>
+          <a href="governance.html">Ethics and governance</a>
+          <a class="active" aria-current="page" href="commissioning.html">Commissioning</a>
+          <a href="demo-brief.html">Demo Brief</a>
+          <a href="faqs.html">FAQs</a>
+          <a href="contact.html">Contact</a>
+        </nav>
       </div>
     </div>
-  </div>
-</section>
+  </header>
 
-<section>
-  <div class="wrap">
-    <div class="grid">
-      <div class="block span-7">
-        <h3>What is being commissioned</h3>
-        <p>
-          A permanent civic listening layer, a public Brief cadence, stewardship,
-          governance, and partner coordination.
-        </p>
+  <main id="content">
+    <!-- Hero -->
+    <section>
+      <div class="wrap">
+        <div class="grid">
+          <div class="card span-8">
+            <div class="card-inner">
+              <div class="eyebrow"><span class="dot" aria-hidden="true"></span> Commissioning pathway</div>
+              <h2>Commissioning Neighbourhood Signals</h2>
+              <p style="margin:0 0 12px; color: var(--muted); font-size: 16px; max-width: 72ch;">
+                Neighbourhood Signals is commissioned as civic listening infrastructure, not as a private analytics tool.
+                The unit of value is the public Brief, plus the stewardship and governance that keeps it safe.
+              </p>
+
+              <div class="hero-actions">
+                <a class="btn primary" href="sprint.html">Start with a 30-day sprint</a>
+                <a class="btn" href="brief.html">What the Brief is</a>
+                <a class="btn" href="safety.html">Safety conditions</a>
+              </div>
+
+              <div class="callout">
+                The sprint produces the evidence. Commissioning is the response.
+              </div>
+            </div>
+          </div>
+
+          <div class="block span-4">
+            <h3>What you are buying</h3>
+            <p>Not software, a civic capability.</p>
+
+            <ul class="list">
+              <li class="item">
+                <div class="k">A public Brief cadence <span class="tag">monthly</span></div>
+                <div class="v">A consistent, readable neighbourhood view that partners can act on.</div>
+              </li>
+              <li class="item">
+                <div class="k">Stewardship <span class="tag">local</span></div>
+                <div class="v">A named steward function that holds boundaries and convenes review.</div>
+              </li>
+              <li class="item">
+                <div class="k">Governance covenant <span class="tag">visible</span></div>
+                <div class="v">A published covenant that prevents mission creep and protects trust.</div>
+              </li>
+              <li class="item">
+                <div class="k">Partner actions <span class="tag">practical</span></div>
+                <div class="v">A lightweight coordination loop across NHS, council, VCS, and community.</div>
+              </li>
+            </ul>
+          </div>
+        </div>
       </div>
-      <div class="block span-5">
-        <h3>What changes locally</h3>
-        <p>
-          Neighbourhood Signals becomes part of how the place listens,
-          plans, and responds, not a time-limited project.
-        </p>
+    </section>
+
+    <!-- Decision logic -->
+    <section>
+      <div class="wrap">
+        <div class="grid">
+          <div class="block span-7">
+            <h3>The decision you are making</h3>
+            <p>
+              After the sprint, the commissioning question is not “do we like this”.
+              It is “how closely do we want to listen, and how often do we want to respond”.
+            </p>
+            <p class="muted">
+              The tiers below are intentionally simple. They let a place choose the depth of listening and the cadence of action,
+              without turning Neighbourhood Signals into a complex programme.
+            </p>
+
+            <div class="callout">
+              If you can say yes to one thing, say yes to listening once, then choose the tier that matches your evidence.
+            </div>
+          </div>
+
+          <div class="block span-5">
+            <h3>Commercial framing</h3>
+            <p>
+              The commissioning model is designed to feel like civic infrastructure.
+            </p>
+            <ul class="list">
+              <li class="item">
+                <div class="k">Priced per place <span class="tag">not per user</span></div>
+                <div class="v">This is a neighbourhood sensor, not a licence for individuals.</div>
+              </li>
+              <li class="item">
+                <div class="k">Budgetable tiers <span class="tag">clear</span></div>
+                <div class="v">Each tier includes the Brief, safety model, and steward pattern.</div>
+              </li>
+              <li class="item">
+                <div class="k">Evidence first <span class="tag">sprint</span></div>
+                <div class="v">The sprint turns “maybe” into “here is what we saw”.</div>
+              </li>
+            </ul>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- Tiers -->
+    <section>
+      <div class="wrap">
+        <div class="block span-12">
+          <h3>The commissioning tiers</h3>
+          <p>
+            Four options, from light listening to anchor-level stewardship. All tiers include the public covenant and the Brief template.
+          </p>
+
+          <div class="grid" style="margin-top: 12px;">
+            <div class="span-6">
+              <div class="tier">
+                <div class="k">We’re listening <span class="tag">baseline</span></div>
+                <div class="price">£3,000 / year</div>
+                <div class="small">Best for: getting the Brief into a steady monthly rhythm, with minimal overhead.</div>
+                <ul class="list" style="margin-top: 8px;">
+                  <li class="item"><div class="k">Monthly Brief <span class="tag">public</span></div><div class="v">A consistent public artefact that partners can read in minutes.</div></li>
+                  <li class="item"><div class="k">Steward pattern <span class="tag">light</span></div><div class="v">Local named steward, covenant upheld, short monthly review.</div></li>
+                  <li class="item"><div class="k">Safety baseline <span class="tag">fixed</span></div><div class="v">No personal data, no profiling, no private dashboards.</div></li>
+                </ul>
+              </div>
+            </div>
+
+            <div class="span-6">
+              <div class="tier">
+                <div class="k">We’re responding <span class="tag">active</span></div>
+                <div class="price">£6,000 / year</div>
+                <div class="small">Best for: when you want the Brief to drive real partner action, not just visibility.</div>
+                <ul class="list" style="margin-top: 8px;">
+                  <li class="item"><div class="k">Monthly Brief <span class="tag">public</span></div><div class="v">Plus clearer “what changed” and “what to do” sections.</div></li>
+                  <li class="item"><div class="k">Partner action loop <span class="tag">lightweight</span></div><div class="v">A small response menu with owners and time horizons.</div></li>
+                  <li class="item"><div class="k">Review rhythm <span class="tag">fortnightly option</span></div><div class="v">Optional mid-cycle sense check when conditions shift.</div></li>
+                </ul>
+              </div>
+            </div>
+
+            <div class="span-6">
+              <div class="tier">
+                <div class="k">We’re embedded <span class="tag">stewarded</span></div>
+                <div class="price">£12,000 / year</div>
+                <div class="small">Best for: when Neighbourhood Signals becomes part of neighbourhood operating rhythm.</div>
+                <ul class="list" style="margin-top: 8px;">
+                  <li class="item"><div class="k">Fortnightly Brief <span class="tag">public</span></div><div class="v">Or monthly with deeper stewarded interpretation.</div></li>
+                  <li class="item"><div class="k">Training and steward support <span class="tag">capability</span></div><div class="v">Support for local stewards and response owners.</div></li>
+                  <li class="item"><div class="k">Loop protection <span class="tag">strong</span></div><div class="v">Stronger checks against overreaction and misinterpretation.</div></li>
+                </ul>
+              </div>
+            </div>
+
+            <div class="span-6">
+              <div class="tier">
+                <div class="k">Anchor neighbourhood <span class="tag">lead</span></div>
+                <div class="price">£20,000 / year</div>
+                <div class="small">Best for: a place that wants to be a regional anchor and help evolve the model.</div>
+                <ul class="list" style="margin-top: 8px;">
+                  <li class="item"><div class="k">Fortnightly Brief <span class="tag">public</span></div><div class="v">Plus deeper cross-partner coordination and learning.</div></li>
+                  <li class="item"><div class="k">Anchor stewardship <span class="tag">shared</span></div><div class="v">Supports stewardship maturity across the place and partners.</div></li>
+                  <li class="item"><div class="k">Learning transfer <span class="tag">network</span></div><div class="v">Document and share what works so other places can adopt safely.</div></li>
+                </ul>
+              </div>
+            </div>
+          </div>
+
+          <div class="callout">
+            These tiers are intentionally legible. They can be mapped to pence-per-resident to make the civic value obvious.
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- Procurement + governance -->
+    <section>
+      <div class="wrap">
+        <div class="grid">
+          <div class="block span-7">
+            <h3>What makes commissioning safe</h3>
+            <p>
+              Commissioners are not just buying output, they are buying constraints.
+              The constraints are the system.
+            </p>
+            <ul class="list">
+              <li class="item">
+                <div class="k">Public covenant <span class="tag">visible</span></div>
+                <div class="v">The hard boundaries are published, and remain stable across tiers.</div>
+              </li>
+              <li class="item">
+                <div class="k">No personal data <span class="tag">non-negotiable</span></div>
+                <div class="v">If a feature needs identity, it does not belong in Neighbourhood Signals.</div>
+              </li>
+              <li class="item">
+                <div class="k">Blinding and unblinding <span class="tag">governed</span></div>
+                <div class="v">Colours prevent stigmatising places and enforce the right order of discussion.</div>
+              </li>
+            </ul>
+
+            <div class="hero-actions">
+              <a class="btn" href="safety.html">Safety by design</a>
+              <a class="btn" href="governance.html">Ethics and governance</a>
+              <a class="btn" href="colours.html">How Colours work</a>
+            </div>
+          </div>
+
+          <div class="block span-5">
+            <h3>What a commissioner needs to do</h3>
+            <p>Three steps, then it runs.</p>
+            <ul class="list">
+              <li class="item">
+                <div class="k">1. Run a sprint <span class="tag">30 days</span></div>
+                <div class="v">Produce your first Brief and your local evidence.</div>
+              </li>
+              <li class="item">
+                <div class="k">2. Choose a tier <span class="tag">budget</span></div>
+                <div class="v">Decide the depth of listening and cadence of response.</div>
+              </li>
+              <li class="item">
+                <div class="k">3. Name the steward <span class="tag">local</span></div>
+                <div class="v">A single named person to convene review and hold boundaries.</div>
+              </li>
+            </ul>
+            <div class="callout">
+              If you can do those three things, you can run Neighbourhood Signals.
+            </div>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- Delivery partner -->
+    <section>
+      <div class="wrap">
+        <div class="card">
+          <div class="card-inner">
+            <div class="grid" style="align-items:center;">
+              <div class="span-7">
+                <h3 style="margin:0 0 8px; font-size: 20px;">The delivery partner stays quiet, on purpose.</h3>
+                <p style="margin:0; color: var(--muted); font-size: 14px;">
+                  Neighbourhood CoLab CIC carries the architecture, steward patterns, and safety model between places.
+                  Locally, ownership stays with the neighbourhood partners.
+                </p>
+              </div>
+              <div class="span-5" style="display:flex; gap:10px; flex-wrap:wrap; justify-content:flex-end;">
+                <a class="btn primary" href="contact.html">Talk to us</a>
+                <a class="btn" href="faqs.html">Read FAQs</a>
+                <a class="btn" href="sprint.html">Start with a sprint</a>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </section>
+  </main>
+
+  <footer>
+    <div class="wrap">
+      <div class="foot">
+        <div>
+          <strong style="color: rgba(255,255,255,0.82);">Neighbourhood Signals</strong><br />
+          <span>Public listening, civic coordination, safe by design.</span>
+        </div>
+        <div style="display:flex; gap:12px; flex-wrap:wrap;">
+          <a href="index.html">Home</a>
+          <a href="sprint.html">30-day sprint</a>
+          <a href="brief.html">Public Brief</a>
+          <a href="safety.html">Safety</a>
+          <a href="contact.html">Contact</a>
+        </div>
+      </div>
+
+      <div style="margin-top: 16px; color: rgba(255,255,255,0.45); font-size: 12px;">
+        © <span id="year"></span> Neighbourhood Signals.
       </div>
     </div>
-  </div>
-</section>
+  </footer>
 
-<section>
-  <div class="wrap">
-    <div class="block span-12">
-      <h3>The commissioning tiers</h3>
-      <p>
-        We’re listening. We’re responding. We’re embedded. Anchor neighbourhood.
-      </p>
-    </div>
-  </div>
-</section>
-
-<section>
-  <div class="wrap">
-    <div class="block span-12">
-      <h3>The delivery partner</h3>
-      <p>
-        Neighbourhood CoLab CIC quietly carries the architecture, stewardship patterns,
-        safety model, and learning between places.
-      </p>
-    </div>
-  </div>
-</section>
-
-</main>
+  <script>
+    document.getElementById("year").textContent = new Date().getFullYear();
+  </script>
 </body>
 </html>
