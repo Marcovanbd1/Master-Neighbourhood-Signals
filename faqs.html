@@ -1,0 +1,276 @@
+<!doctype html>
+<html lang="en-GB">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>Neighbourhood Signals, FAQs</title>
+  <meta name="description" content="Frequently asked questions about Neighbourhood Signals, the 30-day sprint, safety, governance, commissioning, and civic infrastructure." />
+  <style>
+    :root{
+      --bg:#0b0f14;
+      --panel:rgba(255,255,255,.06);
+      --panel2:rgba(255,255,255,.09);
+      --text:rgba(255,255,255,.92);
+      --muted:rgba(255,255,255,.70);
+      --faint:rgba(255,255,255,.55);
+      --line:rgba(255,255,255,.14);
+      --shadow:0 10px 30px rgba(0,0,0,.35);
+      --radius:18px;
+      --radius2:26px;
+      --max:1100px;
+      --pad:clamp(18px,2.6vw,28px);
+    }
+    *{box-sizing:border-box}
+    body{
+      margin:0;
+      font-family: ui-sans-serif, system-ui, -apple-system, Segoe UI, Roboto, Helvetica, Arial;
+      color:var(--text);
+      background:
+        radial-gradient(1200px 700px at 12% 8%, rgba(120,150,255,0.18), transparent 60%),
+        radial-gradient(1000px 650px at 85% 22%, rgba(140,255,210,0.12), transparent 60%),
+        radial-gradient(900px 600px at 55% 95%, rgba(255,170,90,0.10), transparent 60%),
+        linear-gradient(180deg, #070a0f 0%, #0b0f14 55%, #070a0f 100%);
+      line-height:1.5;
+    }
+    a{color:inherit;text-decoration:none}
+    a:hover{text-decoration:underline}
+    .wrap{max-width:var(--max);margin:0 auto;padding:0 var(--pad)}
+
+    /* Top bar */
+    .topbar{
+      position: sticky; top:0; z-index:30;
+      backdrop-filter: blur(12px);
+      background: linear-gradient(180deg, rgba(11,15,20,0.78) 0%, rgba(11,15,20,0.58) 100%);
+      border-bottom: 1px solid var(--line);
+    }
+    .topbar-inner{display:flex;align-items:center;justify-content:space-between;gap:14px;padding:12px 0}
+    .brand{display:flex;align-items:center;gap:10px;min-width:220px}
+    .mark{
+      width:34px;height:34px;border-radius:12px;
+      background:linear-gradient(135deg, rgba(255,255,255,0.18), rgba(255,255,255,0.06));
+      border:1px solid var(--line);
+      box-shadow:var(--shadow);
+      display:grid;place-items:center;
+      font-weight:700;color:rgba(255,255,255,0.85);
+    }
+    .brand h1{margin:0;font-size:14px;font-weight:650}
+    .brand p{margin:0;font-size:12px;color:var(--muted)}
+    .nav{display:flex;gap:10px;flex-wrap:wrap;justify-content:flex-end}
+    .nav a{font-size:13px;color:var(--muted);padding:8px 10px;border-radius:12px;border:1px solid transparent}
+    .nav a:hover{background:rgba(255,255,255,0.06);border-color:rgba(255,255,255,0.10);text-decoration:none;color:var(--text)}
+    .nav a.active{background:rgba(255,255,255,0.08);border-color:rgba(255,255,255,0.14);color:var(--text)}
+
+    section{padding:22px 0}
+    .card{
+      background: linear-gradient(180deg, rgba(255,255,255,0.08) 0%, rgba(255,255,255,0.05) 100%);
+      border: 1px solid rgba(255,255,255,0.12);
+      border-radius: var(--radius2);
+      box-shadow: var(--shadow);
+      overflow:hidden;
+    }
+    .card-inner{padding:26px}
+    h2{margin:0 0 10px;font-size:clamp(28px,3.2vw,44px);line-height:1.08;letter-spacing:-0.6px}
+    p{margin:0 0 10px;color:var(--muted);font-size:14px}
+
+    .faq{
+      margin-top: 14px;
+      display:grid;
+      gap: 10px;
+    }
+    details{
+      border-radius: 18px;
+      border: 1px solid rgba(255,255,255,0.12);
+      background: rgba(255,255,255,0.05);
+      padding: 12px 14px;
+    }
+    summary{
+      cursor:pointer;
+      list-style:none;
+      font-weight: 700;
+      color: rgba(255,255,255,0.90);
+      font-size: 14px;
+      outline: none;
+    }
+    summary::-webkit-details-marker{display:none}
+    details p{margin:10px 0 0}
+
+    .callout{
+      border-left:3px solid rgba(140,255,210,0.55);
+      padding-left:12px;margin-top:12px;color:rgba(255,255,255,0.84);font-size:14px;
+    }
+
+    footer{padding:26px 0 44px;border-top:1px solid var(--line);margin-top:26px;color:var(--faint);font-size:13px}
+    .foot{display:flex;gap:18px;flex-wrap:wrap;align-items:center;justify-content:space-between}
+    .foot a{color:var(--muted)}
+    .foot a:hover{color:var(--text);text-decoration:none}
+
+    @media(max-width:840px){
+      .nav{justify-content:flex-start}
+      .brand{min-width:auto}
+    }
+  </style>
+</head>
+
+<body>
+  <header class="topbar">
+    <div class="wrap">
+      <div class="topbar-inner">
+        <a class="brand" href="index.html" aria-label="Neighbourhood Signals home">
+          <div class="mark" aria-hidden="true">NS</div>
+          <div>
+            <h1>Neighbourhood Signals</h1>
+            <p>Public listening, safe by design</p>
+          </div>
+        </a>
+
+        <nav class="nav" aria-label="Primary">
+          <a href="index.html">Home</a>
+          <a href="sprint.html">30-day sprint</a>
+          <a href="brief.html">Public Brief</a>
+          <a href="colours.html">Colours</a>
+          <a href="safety.html">Safety</a>
+          <a href="governance.html">Ethics and governance</a>
+          <a href="commissioning.html">Commissioning</a>
+          <a href="demo-brief.html">Demo Brief</a>
+          <a class="active" href="faqs.html">FAQs</a>
+        </nav>
+      </div>
+    </div>
+  </header>
+
+  <main>
+    <section>
+      <div class="wrap">
+        <div class="card">
+          <div class="card-inner">
+            <h2>FAQs</h2>
+            <p style="font-size:16px; max-width: 90ch;">
+              The point of this page is to remove friction for commissioners and partners.
+              If you can’t find the question you need, it should be added.
+            </p>
+            <div class="callout">
+              Neighbourhood Signals only works if it is easy to understand, safe to trust, and simple to start.
+            </div>
+          </div>
+        </div>
+
+        <div class="faq" aria-label="Frequently asked questions">
+
+          <details>
+            <summary>What is Neighbourhood Signals, in one sentence?</summary>
+            <p>
+              A public, safe civic listening layer that turns aggregated navigation behaviour into a readable Neighbourhood Brief,
+              so partners can act earlier, together, without personal data.
+            </p>
+          </details>
+
+          <details>
+            <summary>Is this surveillance?</summary>
+            <p>
+              No. It does not identify people, infer identity, or track individuals.
+              If something requires personal data to be useful, it does not belong in Neighbourhood Signals.
+            </p>
+          </details>
+
+          <details>
+            <summary>Why is the Brief public?</summary>
+            <p>
+              Publicness is a safety mechanism. It prevents hidden dashboards, private interpretation, and quiet mission creep,
+              and it makes shared stewardship possible.
+            </p>
+          </details>
+
+          <details>
+            <summary>What are Neighbourhood Colours?</summary>
+            <p>
+              A blinding convention for discussing signal clusters while geography stays masked.
+              This prevents stigmatising or politicised “place judgement” until an agreed action genuinely requires location.
+            </p>
+          </details>
+
+          <details>
+            <summary>Does the 30-day sprint lock us into anything?</summary>
+            <p>
+              No. The sprint is the smallest possible commitment: listen for 30 days, publish the first Brief, then decide what depth of listening you want next.
+            </p>
+          </details>
+
+          <details>
+            <summary>Is 30 days long enough?</summary>
+            <p>
+              Yes for a first signal picture and a first Brief. Some signals will be clearer than others,
+              and the Brief is explicit about uncertainty. The point is to create evidence for commissioning, not perfection.
+            </p>
+          </details>
+
+          <details>
+            <summary>Who publishes the Brief?</summary>
+            <p>
+              The Neighbourhood Steward publishes it on behalf of the local partnership, alongside the public covenant.
+              Neighbourhood CoLab CIC can support drafting and publication patterns.
+            </p>
+          </details>
+
+          <details>
+            <summary>What kinds of actions come out of the Brief?</summary>
+            <p>
+              Low-regret actions first: navigation fixes, clearer signposting, small access improvements, shared comms,
+              better pathways between services, and sometimes placing physical listening points where people actually are.
+            </p>
+          </details>
+
+          <details>
+            <summary>What is “unblinding” and when does it happen?</summary>
+            <p>
+              Unblinding is the governed moment when a location is revealed because a specific agreed action genuinely requires knowing where.
+              It is minimal, logged, and auditable.
+            </p>
+          </details>
+
+          <details>
+            <summary>How is this commissioned after the sprint?</summary>
+            <p>
+              By choosing listening depth and response cadence. The sprint produces your local evidence,
+              then you commission the tier that matches how closely you want to listen and how actively you want to respond.
+            </p>
+          </details>
+
+          <details>
+            <summary>What is Neighbourhood CoLab CIC’s role?</summary>
+            <p>
+              The quiet delivery partner. It carries the safety model, stewardship patterns, civic infrastructure components,
+              and learning between places, without needing to be the public face of the work.
+            </p>
+          </details>
+
+        </div>
+      </div>
+    </section>
+  </main>
+
+  <footer>
+    <div class="wrap">
+      <div class="foot">
+        <div>
+          <strong style="color: rgba(255,255,255,0.82);">Neighbourhood Signals</strong><br />
+          <span>Public listening, civic coordination, safe by design.</span>
+        </div>
+        <div style="display:flex; gap:12px; flex-wrap:wrap;">
+          <a href="index.html">Home</a>
+          <a href="sprint.html">30-day sprint</a>
+          <a href="commissioning.html">Commissioning</a>
+          <a href="demo-brief.html">Demo Brief</a>
+        </div>
+      </div>
+
+      <div style="margin-top: 16px; color: rgba(255,255,255,0.45); font-size: 12px;">
+        © <span id="year"></span> Neighbourhood Signals.
+      </div>
+    </div>
+  </footer>
+
+  <script>
+    document.getElementById("year").textContent = new Date().getFullYear();
+  </script>
+</body>
+</html>
