@@ -1,0 +1,149 @@
+<!doctype html>
+<html lang="en-GB">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>Neighbourhood Signals, The Public Neighbourhood Brief</title>
+  <meta name="description" content="The Public Neighbourhood Brief is the civic artefact that turns listening into shared action, without personal data." />
+  <style>
+    :root{
+      --bg: #0b0f14;
+      --panel: rgba(255,255,255,0.06);
+      --panel2: rgba(255,255,255,0.09);
+      --text: rgba(255,255,255,0.92);
+      --muted: rgba(255,255,255,0.70);
+      --faint: rgba(255,255,255,0.55);
+      --line: rgba(255,255,255,0.14);
+      --shadow: 0 10px 30px rgba(0,0,0,0.35);
+      --radius: 18px;
+      --radius2: 26px;
+      --max: 1100px;
+      --pad: clamp(18px, 2.6vw, 28px);
+    }
+
+    *{ box-sizing: border-box; }
+    body{
+      margin: 0;
+      font-family: system-ui, -apple-system, Segoe UI, Roboto, Helvetica, Arial;
+      color: var(--text);
+      background: linear-gradient(180deg, #070a0f, #0b0f14);
+    }
+    a{ color: inherit; text-decoration: none; }
+    .wrap{ max-width: var(--max); margin: 0 auto; padding: 0 var(--pad); }
+    section{ padding: 24px 0; }
+    .grid{ display: grid; grid-template-columns: repeat(12,1fr); gap: 14px; }
+    .span-7{ grid-column: span 7; }
+    .span-5{ grid-column: span 5; }
+    .span-12{ grid-column: span 12; }
+    .block{
+      background: rgba(255,255,255,0.05);
+      border: 1px solid rgba(255,255,255,0.12);
+      border-radius: var(--radius2);
+      padding: 22px;
+      box-shadow: var(--shadow);
+    }
+    h1{ margin:0 0 10px; font-size: clamp(28px,3vw,42px); }
+    h3{ margin:0 0 8px; }
+    p{ color: var(--muted); font-size: 14px; }
+    .callout{ border-left:3px solid rgba(140,255,210,.5); padding-left:12px; margin-top:12px; }
+
+    @media(max-width:840px){
+      .span-7,.span-5{ grid-column: span 12; }
+    }
+  </style>
+</head>
+
+<body>
+
+<main>
+
+<section>
+  <div class="wrap">
+    <div class="block span-12">
+      <h1>The Public Neighbourhood Brief</h1>
+      <p>
+        The Brief is the civic artefact that turns listening into shared responsibility.
+        It is written for humans, published for the neighbourhood, and trusted by commissioners.
+      </p>
+      <div class="callout">
+        It is not a dashboard. It is a public mirror.
+      </div>
+    </div>
+  </div>
+</section>
+
+<section>
+  <div class="wrap">
+    <div class="grid">
+      <div class="block span-7">
+        <h3>What the Brief is</h3>
+        <p>
+          A short, readable account of what people in a neighbourhood are trying to get help with,
+          how that is shifting, and where loops and friction are forming.
+        </p>
+        <p>
+          It is written with metacognitive humility. Signals are clues, not conclusions.
+        </p>
+      </div>
+
+      <div class="block span-5">
+        <h3>What the Brief is not</h3>
+        <p>It does not identify people. It does not label communities. It does not rank neighbourhoods.</p>
+        <p>It never contains personal data or inferred identities.</p>
+      </div>
+    </div>
+  </div>
+</section>
+
+<section>
+  <div class="wrap">
+    <div class="grid">
+      <div class="block span-7">
+        <h3>Why the Brief is public</h3>
+        <p>
+          Publicness is a safety mechanism. It prevents private interpretation,
+          hidden dashboards, and quiet mission creep.
+        </p>
+        <p>
+          When everyone reads the same Brief, coordination replaces duplication.
+        </p>
+      </div>
+
+      <div class="block span-5">
+        <h3>What it creates</h3>
+        <p>A shared civic question:</p>
+        <p><strong>“Who is responsible for responding to what our neighbourhood is telling us?”</strong></p>
+      </div>
+    </div>
+  </div>
+</section>
+
+<section>
+  <div class="wrap">
+    <div class="block span-12">
+      <h3>What the Brief contains</h3>
+      <p>• What is forming (signals)<br>
+         • How patterns are shifting<br>
+         • Where loops and friction appear<br>
+         • Suggested partner responses<br>
+         • A clear “what happens next”</p>
+    </div>
+  </div>
+</section>
+
+<section>
+  <div class="wrap">
+    <div class="block span-12">
+      <h3>What happens after publication</h3>
+      <p>
+        The Brief becomes the commissioning artefact.
+        Not a slide deck. Not a pilot report.
+        A living civic reference point.
+      </p>
+    </div>
+  </div>
+</section>
+
+</main>
+</body>
+</html>
