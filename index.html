@@ -19,6 +19,7 @@
       --radius2: 26px;
       --max: 1100px;
       --pad: clamp(18px, 2.6vw, 28px);
+      --focus: rgba(140,255,210,0.55);
     }
 
     *{ box-sizing: border-box; }
@@ -37,12 +38,31 @@
 
     a{ color: inherit; text-decoration: none; }
     a:hover{ text-decoration: underline; }
+    a:focus-visible{
+      outline: 2px solid var(--focus);
+      outline-offset: 3px;
+      border-radius: 10px;
+    }
 
     .wrap{
       max-width: var(--max);
       margin: 0 auto;
       padding: 0 var(--pad);
     }
+
+    /* Skip link */
+    .skip{
+      position: absolute;
+      left: -999px;
+      top: 12px;
+      background: rgba(0,0,0,0.65);
+      border: 1px solid rgba(255,255,255,0.18);
+      color: var(--text);
+      padding: 10px 12px;
+      border-radius: 12px;
+      z-index: 999;
+    }
+    .skip:focus{ left: 12px; }
 
     /* Top bar */
     .topbar{
@@ -102,6 +122,7 @@
       padding: 8px 10px;
       border-radius: 12px;
       border: 1px solid transparent;
+      white-space: nowrap;
     }
     .nav a:hover{
       background: rgba(255,255,255,0.06);
@@ -109,7 +130,8 @@
       text-decoration: none;
       color: var(--text);
     }
-    .nav a.active{
+    .nav a.active,
+    .nav a[aria-current="page"]{
       background: rgba(255,255,255,0.08);
       border-color: rgba(255,255,255,0.14);
       color: var(--text);
@@ -275,9 +297,8 @@
     }
 
     /* Sections */
-    section{
-      padding: 22px 0;
-    }
+    section{ padding: 22px 0; }
+
     .grid{
       display: grid;
       grid-template-columns: repeat(12, minmax(0, 1fr));
@@ -341,6 +362,7 @@
       border: 1px solid rgba(255,255,255,0.14);
       background: rgba(255,255,255,0.06);
       color: rgba(255,255,255,0.86);
+      white-space: nowrap;
     }
     .badge.blue{ border-color: rgba(120,150,255,0.36); background: rgba(120,150,255,0.14); }
     .badge.yellow{ border-color: rgba(255,210,90,0.36); background: rgba(255,210,90,0.14); }
@@ -370,6 +392,7 @@
     }
     @media (max-width: 840px){
       .span-7, .span-5{ grid-column: span 12; }
+      .nav{ justify-content: flex-start; }
     }
     @media (max-width: 520px){
       .mini{ grid-template-columns: 1fr; }
@@ -381,6 +404,8 @@
 </head>
 
 <body>
+  <a class="skip" href="#content">Skip to content</a>
+
   <header class="topbar">
     <div class="wrap">
       <div class="topbar-inner">
@@ -393,7 +418,7 @@
         </a>
 
         <nav class="nav" aria-label="Primary">
-          <a class="active" href="index.html">Home</a>
+          <a class="active" aria-current="page" href="index.html">Home</a>
           <a href="sprint.html">30-day sprint</a>
           <a href="brief.html">Public Brief</a>
           <a href="colours.html">Colours</a>
@@ -402,12 +427,13 @@
           <a href="commissioning.html">Commissioning</a>
           <a href="demo-brief.html">Demo Brief</a>
           <a href="faqs.html">FAQs</a>
+          <a href="contact.html">Contact</a>
         </nav>
       </div>
     </div>
   </header>
 
-  <main>
+  <main id="content">
     <section class="hero">
       <div class="wrap">
         <div class="hero-grid">
@@ -438,7 +464,7 @@
                 </div>
                 <div class="pill" role="listitem">
                   <strong>Listening, not labelling</strong>
-                  <span>Signals are clues of need, not judgements about people.</span>
+                  <span>Signals are clues of need, not judgements about people or places.</span>
                 </div>
               </div>
             </div>
@@ -562,7 +588,6 @@
       </div>
     </section>
 
-    <!-- Colours section (fixed structure) -->
     <section>
       <div class="wrap">
         <div class="grid">
@@ -622,7 +647,6 @@
       </div>
     </section>
 
-    <!-- Safety section (was floating, now properly wrapped) -->
     <section>
       <div class="wrap">
         <div class="grid">
@@ -694,6 +718,7 @@
                 <a class="btn primary" href="sprint.html">Run a sprint</a>
                 <a class="btn" href="commissioning.html">Commission it</a>
                 <a class="btn" href="faqs.html">Read FAQs</a>
+                <a class="btn" href="contact.html">Contact</a>
               </div>
             </div>
           </div>
@@ -714,6 +739,7 @@
           <a href="governance.html">Ethics and governance</a>
           <a href="commissioning.html">Commissioning</a>
           <a href="demo-brief.html">Demo Brief</a>
+          <a href="contact.html">Contact</a>
         </div>
       </div>
 
