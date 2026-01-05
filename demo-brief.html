@@ -1,0 +1,387 @@
+<!doctype html>
+<html lang="en-GB">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>Neighbourhood Signals, Demo Brief</title>
+  <meta name="description" content="A static demo of what a Neighbourhood Signals Brief could look and feel like." />
+  <style>
+    :root{
+      --bg:#0b0f14;
+      --panel:rgba(255,255,255,.06);
+      --panel2:rgba(255,255,255,.09);
+      --text:rgba(255,255,255,.92);
+      --muted:rgba(255,255,255,.70);
+      --faint:rgba(255,255,255,.55);
+      --line:rgba(255,255,255,.14);
+      --shadow:0 10px 30px rgba(0,0,0,.35);
+      --radius:18px;
+      --radius2:26px;
+      --max:1100px;
+      --pad:clamp(18px,2.6vw,28px);
+    }
+    *{box-sizing:border-box}
+    body{
+      margin:0;
+      font-family: ui-sans-serif, system-ui, -apple-system, Segoe UI, Roboto, Helvetica, Arial;
+      color:var(--text);
+      background:
+        radial-gradient(1200px 700px at 12% 8%, rgba(120,150,255,0.18), transparent 60%),
+        radial-gradient(1000px 650px at 85% 22%, rgba(140,255,210,0.12), transparent 60%),
+        radial-gradient(900px 600px at 55% 95%, rgba(255,170,90,0.10), transparent 60%),
+        linear-gradient(180deg, #070a0f 0%, #0b0f14 55%, #070a0f 100%);
+      line-height:1.5;
+    }
+    a{color:inherit;text-decoration:none}
+    a:hover{text-decoration:underline}
+    .wrap{max-width:var(--max);margin:0 auto;padding:0 var(--pad)}
+    section{padding:22px 0}
+    .grid{display:grid;grid-template-columns:repeat(12,minmax(0,1fr));gap:14px}
+    .span-7{grid-column:span 7}
+    .span-5{grid-column:span 5}
+    .span-12{grid-column:span 12}
+
+    .topbar{
+      position: sticky; top:0; z-index:30;
+      backdrop-filter: blur(12px);
+      background: linear-gradient(180deg, rgba(11,15,20,0.78) 0%, rgba(11,15,20,0.58) 100%);
+      border-bottom: 1px solid var(--line);
+    }
+    .topbar-inner{display:flex;align-items:center;justify-content:space-between;gap:14px;padding:12px 0}
+    .brand{display:flex;align-items:center;gap:10px;min-width:220px}
+    .mark{
+      width:34px;height:34px;border-radius:12px;
+      background:linear-gradient(135deg, rgba(255,255,255,0.18), rgba(255,255,255,0.06));
+      border:1px solid var(--line);
+      box-shadow:var(--shadow);
+      display:grid;place-items:center;
+      font-weight:700;color:rgba(255,255,255,0.85);
+    }
+    .brand h1{margin:0;font-size:14px;font-weight:650}
+    .brand p{margin:0;font-size:12px;color:var(--muted)}
+    .nav{display:flex;gap:10px;flex-wrap:wrap;justify-content:flex-end}
+    .nav a{font-size:13px;color:var(--muted);padding:8px 10px;border-radius:12px;border:1px solid transparent}
+    .nav a:hover{background:rgba(255,255,255,0.06);border-color:rgba(255,255,255,0.10);text-decoration:none;color:var(--text)}
+    .nav a.active{background:rgba(255,255,255,0.08);border-color:rgba(255,255,255,0.14);color:var(--text)}
+
+    .card{
+      background: linear-gradient(180deg, rgba(255,255,255,0.08) 0%, rgba(255,255,255,0.05) 100%);
+      border: 1px solid rgba(255,255,255,0.12);
+      border-radius: var(--radius2);
+      box-shadow: var(--shadow);
+      overflow:hidden;
+    }
+    .card-inner{padding:26px}
+    .block{
+      background: rgba(255,255,255,0.05);
+      border: 1px solid rgba(255,255,255,0.12);
+      border-radius: var(--radius2);
+      padding: 20px;
+      box-shadow: var(--shadow);
+    }
+
+    .eyebrow{
+      display:inline-flex;gap:8px;align-items:center;
+      font-size:12px;letter-spacing:.28px;text-transform:uppercase;
+      color:rgba(255,255,255,0.70);margin-bottom:10px;
+    }
+    .dot{width:8px;height:8px;border-radius:999px;background:rgba(140,255,210,0.75);box-shadow:0 0 0 4px rgba(140,255,210,0.12)}
+    h2{margin:0 0 10px;font-size:clamp(28px,3.2vw,44px);line-height:1.08;letter-spacing:-0.6px}
+    h3{margin:0 0 8px;font-size:18px;letter-spacing:-0.2px}
+    p{margin:0 0 10px;color:var(--muted);font-size:14px}
+
+    .callout{
+      border-left:3px solid rgba(140,255,210,0.55);
+      padding-left:12px;margin-top:12px;color:rgba(255,255,255,0.84);font-size:14px;
+    }
+
+    .pillrow{display:flex;flex-wrap:wrap;gap:8px;margin-top:10px}
+    .pill{
+      font-size:12px;color:rgba(255,255,255,0.82);
+      padding:6px 10px;border-radius:999px;
+      border:1px solid rgba(255,255,255,0.14);
+      background:rgba(255,255,255,0.05);
+    }
+
+    .signals{display:grid;gap:10px;margin-top:10px}
+    .signal{
+      border-radius:16px;border:1px solid rgba(255,255,255,0.12);
+      background:rgba(255,255,255,0.05);
+      padding:14px;display:grid;gap:6px;
+    }
+    .row{display:flex;align-items:center;justify-content:space-between;gap:10px}
+    .badge{
+      font-size:11px;padding:4px 8px;border-radius:999px;
+      border:1px solid rgba(255,255,255,0.14);
+      background:rgba(255,255,255,0.06);
+      color:rgba(255,255,255,0.86);
+      white-space:nowrap;
+    }
+    .badge.blue{border-color:rgba(120,150,255,0.36);background:rgba(120,150,255,0.14)}
+    .badge.yellow{border-color:rgba(255,210,90,0.36);background:rgba(255,210,90,0.14)}
+    .meta{font-size:12px;color:rgba(255,255,255,0.62)}
+
+    .list{margin:0;padding:0;list-style:none;display:grid;gap:10px}
+    .item{
+      border-radius:18px;border:1px solid rgba(255,255,255,0.12);
+      background:rgba(255,255,255,0.05);
+      padding:12px;
+    }
+    .k{display:flex;align-items:center;justify-content:space-between;gap:10px;font-size:13px;font-weight:650;color:rgba(255,255,255,0.88)}
+    .v{margin-top:6px;color:var(--muted);font-size:12px}
+    .tag{
+      font-size:11px;color:rgba(255,255,255,0.78);
+      padding:4px 8px;border-radius:999px;
+      border:1px solid rgba(255,255,255,0.14);
+      background:rgba(255,255,255,0.05);
+      white-space:nowrap;
+    }
+
+    footer{padding:26px 0 44px;border-top:1px solid var(--line);margin-top:26px;color:var(--faint);font-size:13px}
+    .foot{display:flex;gap:18px;flex-wrap:wrap;align-items:center;justify-content:space-between}
+    .foot a{color:var(--muted)}
+    .foot a:hover{color:var(--text);text-decoration:none}
+
+    @media(max-width:840px){
+      .span-7,.span-5{grid-column:span 12}
+      .nav{justify-content:flex-start}
+      .brand{min-width:auto}
+    }
+  </style>
+</head>
+
+<body>
+  <header class="topbar">
+    <div class="wrap">
+      <div class="topbar-inner">
+        <a class="brand" href="index.html" aria-label="Neighbourhood Signals home">
+          <div class="mark" aria-hidden="true">NS</div>
+          <div>
+            <h1>Neighbourhood Signals</h1>
+            <p>Public listening, safe by design</p>
+          </div>
+        </a>
+
+        <nav class="nav" aria-label="Primary">
+          <a href="index.html">Home</a>
+          <a href="sprint.html">30-day sprint</a>
+          <a href="brief.html">Public Brief</a>
+          <a href="colours.html">Colours</a>
+          <a href="safety.html">Safety</a>
+          <a href="governance.html">Ethics and governance</a>
+          <a href="commissioning.html">Commissioning</a>
+          <a class="active" href="demo-brief.html">Demo Brief</a>
+          <a href="faqs.html">FAQs</a>
+        </nav>
+      </div>
+    </div>
+  </header>
+
+  <main>
+    <!-- Header -->
+    <section>
+      <div class="wrap">
+        <div class="card">
+          <div class="card-inner">
+            <div class="eyebrow"><span class="dot" aria-hidden="true"></span> Static demo, public-facing draft</div>
+            <h2>Neighbourhood Signals Brief</h2>
+            <p style="margin:0; color: var(--muted); font-size: 16px; max-width: 90ch;">
+              This is a design-led mock-up of what a public Neighbourhood Signals Brief could look and feel like.
+              It is aggregated, non-identifying, and written with metacognitive humility.
+              Signals are clues, not conclusions.
+            </p>
+
+            <div class="pillrow" aria-label="Brief properties">
+              <div class="pill">No personal data</div>
+              <div class="pill">Blinded to place (Colours)</div>
+              <div class="pill">Public by default</div>
+              <div class="pill">Partner actions</div>
+              <div class="pill">Gentle response</div>
+            </div>
+
+            <div class="callout">
+              What you are seeing: aggregated patterns in what people are trying to find help with, and how that changes week to week.<br>
+              What you are not seeing: individuals, identities, addresses, or anything that could be used to profile a person.
+            </div>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- Snapshot -->
+    <section>
+      <div class="wrap">
+        <div class="grid">
+          <div class="block span-7">
+            <h3>Snapshot</h3>
+            <p><span class="meta">Period:</span> Last 30 days (demo)</p>
+            <p><span class="meta">Cadence:</span> Monthly publication</p>
+            <p><span class="meta">Scope:</span> Aggregated navigation behaviour across local support surfaces</p>
+
+            <div class="callout">
+              Interpretation note: this Brief avoids overclaiming. Where a pattern could be noise, it says so.
+            </div>
+          </div>
+
+          <div class="block span-5">
+            <h3>What partners should do first</h3>
+            <ul class="list" style="margin-top:12px;">
+              <li class="item">
+                <div class="k">Read it together <span class="tag">60 mins</span></div>
+                <div class="v">One shared interpretation session across NHS, council, VCS.</div>
+              </li>
+              <li class="item">
+                <div class="k">Pick 1–2 low-regret actions <span class="tag">this month</span></div>
+                <div class="v">Navigation fixes, messaging, access improvements.</div>
+              </li>
+              <li class="item">
+                <div class="k">Stay blind to place <span class="tag">default</span></div>
+                <div class="v">Only unblind if a specific action genuinely requires location.</div>
+              </li>
+            </ul>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- Signals -->
+    <section>
+      <div class="wrap">
+        <div class="grid">
+          <div class="block span-12">
+            <h3>Signals forming</h3>
+            <p>Below are example signal clusters. Colours keep the view blind to which neighbourhood this relates to.</p>
+
+            <div class="signals" aria-label="Signal clusters">
+              <div class="signal">
+                <div class="row">
+                  <strong>Signal cluster 01, Money pressure and food support</strong>
+                  <span class="badge yellow">Neighbourhood Yellow</span>
+                </div>
+                <div class="meta">Pattern: persistent rise, repeated loops into the same few pages</div>
+                <div class="callout">
+                  Hypothesis: people are searching for immediate help, but are not finding a clear path quickly.
+                </div>
+              </div>
+
+              <div class="signal">
+                <div class="row">
+                  <strong>Signal cluster 02, Feeling low or anxious</strong>
+                  <span class="badge blue">Neighbourhood Blue</span>
+                </div>
+                <div class="meta">Pattern: early rise, unclear persistence yet</div>
+                <div class="callout">
+                  Interpretation caution: this may be seasonal fluctuation. Watch for persistence next month.
+                </div>
+              </div>
+
+              <div class="signal">
+                <div class="row">
+                  <strong>Signal cluster 03, NHS App and access friction</strong>
+                  <span class="badge yellow">Neighbourhood Yellow</span>
+                </div>
+                <div class="meta">Pattern: repeated searches and drop-offs around “appointments” and “messages”</div>
+                <div class="callout">
+                  Hypothesis: people want the front door, but don’t know what it can do, or how to turn it on.
+                </div>
+              </div>
+            </div>
+
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- Partner actions -->
+    <section>
+      <div class="wrap">
+        <div class="grid">
+          <div class="block span-7">
+            <h3>Suggested partner actions</h3>
+            <p>These are examples. The principle is gentle action, shared stewardship, and low effort.</p>
+
+            <ul class="list" style="margin-top:12px;">
+              <li class="item">
+                <div class="k">Action A, reduce a loop <span class="tag">navigation</span></div>
+                <div class="v">Rewrite one page, add one clearer route, reduce “bounce” points.</div>
+              </li>
+              <li class="item">
+                <div class="k">Action B, add a listening point <span class="tag">civic</span></div>
+                <div class="v">A physical “door” people can scan in libraries, practices, community venues.</div>
+              </li>
+              <li class="item">
+                <div class="k">Action C, a short public message <span class="tag">comms</span></div>
+                <div class="v">One shareable message that helps people find the right path quickly.</div>
+              </li>
+            </ul>
+
+            <div class="callout">
+              The measure of success is simple: fewer loops, less confusion, easier access to support.
+            </div>
+          </div>
+
+          <div class="block span-5">
+            <h3>Unblinding note</h3>
+            <p>
+              This demo stays blinded throughout. In live use, unblinding only happens if a chosen action genuinely requires knowing where.
+            </p>
+            <p class="muted">
+              Example: placing a physical listening point would require location. A website navigation fix would not.
+            </p>
+
+            <ul class="list" style="margin-top:12px;">
+              <li class="item">
+                <div class="k">Default <span class="tag">stay blind</span></div>
+                <div class="v">Interpret, plan, and act in place-agnostic ways first.</div>
+              </li>
+              <li class="item">
+                <div class="k">If needed <span class="tag">unblind</span></div>
+                <div class="v">Only the smallest necessary group, with a logged purpose.</div>
+              </li>
+            </ul>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- Close -->
+    <section>
+      <div class="wrap">
+        <div class="card">
+          <div class="card-inner">
+            <h3 style="margin:0 0 8px; font-size: 20px;">This is what a 30-day sprint produces.</h3>
+            <p style="margin:0; color: var(--muted); font-size: 14px;">
+              A public Brief that lets partners see the same picture, coordinate action, and decide what depth of listening to commission next.
+            </p>
+          </div>
+        </div>
+      </div>
+    </section>
+  </main>
+
+  <footer>
+    <div class="wrap">
+      <div class="foot">
+        <div>
+          <strong style="color: rgba(255,255,255,0.82);">Neighbourhood Signals</strong><br />
+          <span>Public listening, civic coordination, safe by design.</span>
+        </div>
+        <div style="display:flex; gap:12px; flex-wrap:wrap;">
+          <a href="index.html">Home</a>
+          <a href="brief.html">Public Brief</a>
+          <a href="colours.html">Colours</a>
+          <a href="commissioning.html">Commissioning</a>
+        </div>
+      </div>
+
+      <div style="margin-top: 16px; color: rgba(255,255,255,0.45); font-size: 12px;">
+        © <span id="year"></span> Neighbourhood Signals.
+      </div>
+    </div>
+  </footer>
+
+  <script>
+    document.getElementById("year").textContent = new Date().getFullYear();
+  </script>
+</body>
+</html>
