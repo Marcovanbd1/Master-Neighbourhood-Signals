@@ -3,753 +3,231 @@
 <head>
   <meta charset="utf-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1" />
-  <title>Neighbourhood Signals, Home</title>
-  <meta name="description" content="Neighbourhood Signals is a public, safe civic listening layer that turns aggregated behaviour into a readable Neighbourhood Brief, without personal data, profiling, or private dashboards." />
+  <title>Neighbourhood Signals – Canonical Scroll</title>
+  <meta name="description" content="Neighbourhood Signals is a civic listening framework. This canonical scroll is the single source of truth." />
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600&family=Literata:ital,wght@0,400;0,600;1,400&display=swap" rel="stylesheet">
   <style>
     :root{
-      --bg: #0b0f14;
-      --panel: rgba(255,255,255,0.06);
-      --panel2: rgba(255,255,255,0.09);
-      --text: rgba(255,255,255,0.92);
-      --muted: rgba(255,255,255,0.70);
-      --faint: rgba(255,255,255,0.55);
-      --line: rgba(255,255,255,0.14);
-      --shadow: 0 10px 30px rgba(0,0,0,0.35);
-      --radius: 18px;
-      --radius2: 26px;
-      --max: 1100px;
-      --pad: clamp(18px, 2.6vw, 28px);
-      --focus: rgba(140,255,210,0.55);
+      --paper:#f6f5f2;
+      --ink:#1f2328;
+      --muted:#6b7280;
+      --line:#e3e5e8;
+      --accent:#4f46e5;
+      --max:68ch;
     }
-
-    *{ box-sizing: border-box; }
-    html, body{ height: 100%; }
+    *{box-sizing:border-box}
+    html{scroll-behavior:smooth}
     body{
-      margin: 0;
-      font-family: ui-sans-serif, system-ui, -apple-system, Segoe UI, Roboto, Helvetica, Arial, "Apple Color Emoji", "Segoe UI Emoji";
-      color: var(--text);
-      background:
-        radial-gradient(1200px 700px at 12% 8%, rgba(120,150,255,0.18), transparent 60%),
-        radial-gradient(1000px 650px at 85% 22%, rgba(140,255,210,0.12), transparent 60%),
-        radial-gradient(900px 600px at 55% 95%, rgba(255,170,90,0.10), transparent 60%),
-        linear-gradient(180deg, #070a0f 0%, #0b0f14 55%, #070a0f 100%);
-      line-height: 1.5;
+      margin:0;
+      background:var(--paper);
+      color:var(--ink);
+      font-family:Literata, Georgia, serif;
+      line-height:1.6;
     }
-
-    a{ color: inherit; text-decoration: none; }
-    a:hover{ text-decoration: underline; }
-    a:focus-visible{
-      outline: 2px solid var(--focus);
-      outline-offset: 3px;
-      border-radius: 10px;
+    a{color:var(--accent);text-decoration:none}
+    a:hover{text-decoration:underline}
+    .wrap{max-width:var(--max);margin:0 auto;padding:0 1.2rem}
+    header{
+      position:sticky;top:0;background:rgba(246,245,242,.95);backdrop-filter:saturate(120%) blur(4px);
+      border-bottom:1px solid var(--line);z-index:10
     }
-
-    .wrap{
-      max-width: var(--max);
-      margin: 0 auto;
-      padding: 0 var(--pad);
-    }
-
-    /* Skip link */
-    .skip{
-      position: absolute;
-      left: -999px;
-      top: 12px;
-      background: rgba(0,0,0,0.65);
-      border: 1px solid rgba(255,255,255,0.18);
-      color: var(--text);
-      padding: 10px 12px;
-      border-radius: 12px;
-      z-index: 999;
-    }
-    .skip:focus{ left: 12px; }
-
-    /* Top bar */
-    .topbar{
-      position: sticky;
-      top: 0;
-      z-index: 30;
-      backdrop-filter: blur(12px);
-      background: linear-gradient(180deg, rgba(11,15,20,0.78) 0%, rgba(11,15,20,0.58) 100%);
-      border-bottom: 1px solid var(--line);
-    }
-    .topbar-inner{
-      display: flex;
-      align-items: center;
-      justify-content: space-between;
-      gap: 14px;
-      padding: 12px 0;
-    }
-    .brand{
-      display: flex;
-      align-items: center;
-      gap: 10px;
-      min-width: 220px;
-    }
-    .mark{
-      width: 34px;
-      height: 34px;
-      border-radius: 12px;
-      background: linear-gradient(135deg, rgba(255,255,255,0.18), rgba(255,255,255,0.06));
-      border: 1px solid var(--line);
-      box-shadow: var(--shadow);
-      display: grid;
-      place-items: center;
-      font-weight: 700;
-      color: rgba(255,255,255,0.85);
-    }
-    .brand h1{
-      margin: 0;
-      font-size: 14px;
-      letter-spacing: 0.2px;
-      font-weight: 650;
-    }
-    .brand p{
-      margin: 0;
-      font-size: 12px;
-      color: var(--muted);
-    }
-
-    .nav{
-      display: flex;
-      gap: 10px;
-      flex-wrap: wrap;
-      justify-content: flex-end;
-    }
-    .nav a{
-      font-size: 13px;
-      color: var(--muted);
-      padding: 8px 10px;
-      border-radius: 12px;
-      border: 1px solid transparent;
-      white-space: nowrap;
-    }
-    .nav a:hover{
-      background: rgba(255,255,255,0.06);
-      border-color: rgba(255,255,255,0.10);
-      text-decoration: none;
-      color: var(--text);
-    }
-    .nav a.active,
-    .nav a[aria-current="page"]{
-      background: rgba(255,255,255,0.08);
-      border-color: rgba(255,255,255,0.14);
-      color: var(--text);
-    }
-
-    /* Hero */
-    .hero{
-      padding: 44px 0 22px;
-    }
-    .hero-grid{
-      display: grid;
-      grid-template-columns: 1.15fr 0.85fr;
-      gap: 18px;
-      align-items: stretch;
-    }
-    .card{
-      background: linear-gradient(180deg, rgba(255,255,255,0.08) 0%, rgba(255,255,255,0.05) 100%);
-      border: 1px solid rgba(255,255,255,0.12);
-      border-radius: var(--radius2);
-      box-shadow: var(--shadow);
-      overflow: hidden;
-    }
-    .card-inner{
-      padding: 26px;
-    }
-    .eyebrow{
-      display: inline-flex;
-      gap: 8px;
-      align-items: center;
-      font-size: 12px;
-      letter-spacing: 0.28px;
-      text-transform: uppercase;
-      color: rgba(255,255,255,0.70);
-      margin-bottom: 10px;
-    }
-    .dot{
-      width: 8px; height: 8px; border-radius: 999px;
-      background: rgba(140,255,210,0.75);
-      box-shadow: 0 0 0 4px rgba(140,255,210,0.12);
-    }
-    h2{
-      margin: 0 0 10px;
-      font-size: clamp(28px, 3.2vw, 44px);
-      line-height: 1.08;
-      letter-spacing: -0.6px;
-    }
-    .lead{
-      margin: 0 0 18px;
-      color: var(--muted);
-      font-size: 16px;
-      max-width: 64ch;
-    }
-    .hero-actions{
-      display: flex;
-      flex-wrap: wrap;
-      gap: 10px;
-      margin-top: 16px;
-    }
-    .btn{
-      display: inline-flex;
-      align-items: center;
-      gap: 10px;
-      padding: 10px 14px;
-      border-radius: 14px;
-      border: 1px solid rgba(255,255,255,0.14);
-      background: rgba(255,255,255,0.08);
-      color: var(--text);
-      font-size: 14px;
-      font-weight: 600;
-      text-decoration: none;
-    }
-    .btn:hover{
-      background: rgba(255,255,255,0.11);
-      text-decoration: none;
-    }
-    .btn.primary{
-      background: rgba(140,255,210,0.16);
-      border-color: rgba(140,255,210,0.34);
-    }
-    .btn.primary:hover{
-      background: rgba(140,255,210,0.20);
-    }
-
-    .mini{
-      padding: 18px 18px 0;
-      border-top: 1px solid rgba(255,255,255,0.10);
-      margin-top: 18px;
-      display: grid;
-      grid-template-columns: repeat(3, minmax(0, 1fr));
-      gap: 12px;
-    }
-    .mini .pill{
-      border-radius: 16px;
-      border: 1px solid rgba(255,255,255,0.12);
-      background: rgba(255,255,255,0.05);
-      padding: 12px;
-    }
-    .pill strong{
-      display: block;
-      font-size: 12px;
-      color: rgba(255,255,255,0.85);
-      margin-bottom: 4px;
-      letter-spacing: 0.2px;
-    }
-    .pill span{
-      font-size: 12px;
-      color: var(--muted);
-    }
-
-    /* Right-hand hero card */
-    .side{
-      display: flex;
-      flex-direction: column;
-    }
-    .side .card-inner{
-      padding: 22px;
-    }
-    .side h3{
-      margin: 0 0 8px;
-      font-size: 16px;
-      letter-spacing: 0.2px;
-    }
-    .side p{
-      margin: 0 0 14px;
-      color: var(--muted);
-      font-size: 13px;
-    }
-    .list{
-      margin: 0;
-      padding: 0;
-      list-style: none;
-      display: grid;
-      gap: 10px;
-    }
-    .item{
-      border-radius: var(--radius);
-      border: 1px solid rgba(255,255,255,0.12);
-      background: rgba(255,255,255,0.05);
-      padding: 12px 12px;
-    }
-    .item .k{
-      display: flex;
-      align-items: center;
-      justify-content: space-between;
-      gap: 10px;
-      font-size: 13px;
-      color: rgba(255,255,255,0.88);
-      font-weight: 650;
-    }
-    .item .v{
-      margin-top: 6px;
-      color: var(--muted);
-      font-size: 12px;
-    }
-    .tag{
-      font-size: 11px;
-      color: rgba(255,255,255,0.78);
-      padding: 4px 8px;
-      border-radius: 999px;
-      border: 1px solid rgba(255,255,255,0.14);
-      background: rgba(255,255,255,0.05);
-      white-space: nowrap;
-    }
-
-    /* Sections */
-    section{ padding: 22px 0; }
-
-    .grid{
-      display: grid;
-      grid-template-columns: repeat(12, minmax(0, 1fr));
-      gap: 14px;
-    }
-    .span-7{ grid-column: span 7; }
-    .span-5{ grid-column: span 5; }
-    .span-12{ grid-column: span 12; }
-
-    .block{
-      background: rgba(255,255,255,0.05);
-      border: 1px solid rgba(255,255,255,0.12);
-      border-radius: var(--radius2);
-      padding: 20px;
-      box-shadow: var(--shadow);
-    }
-    .block h3{
-      margin: 0 0 8px;
-      font-size: 18px;
-      letter-spacing: -0.2px;
-    }
-    .block p{
-      margin: 0 0 10px;
-      color: var(--muted);
-      font-size: 14px;
-    }
-    .muted{ color: var(--muted); }
-
-    .callout{
-      border-left: 3px solid rgba(140,255,210,0.55);
-      padding-left: 12px;
-      margin-top: 12px;
-      color: rgba(255,255,255,0.84);
-      font-size: 14px;
-    }
-
-    /* Colours */
-    .colours{
-      display: grid;
-      gap: 10px;
-      margin-top: 10px;
-    }
-    .colour{
-      border-radius: 16px;
-      border: 1px solid rgba(255,255,255,0.12);
-      background: rgba(255,255,255,0.05);
-      padding: 12px;
-      display: grid;
-      gap: 6px;
-    }
-    .colour .row{
-      display: flex;
-      align-items: center;
-      justify-content: space-between;
-      gap: 10px;
-    }
-    .badge{
-      font-size: 11px;
-      padding: 4px 8px;
-      border-radius: 999px;
-      border: 1px solid rgba(255,255,255,0.14);
-      background: rgba(255,255,255,0.06);
-      color: rgba(255,255,255,0.86);
-      white-space: nowrap;
-    }
-    .badge.blue{ border-color: rgba(120,150,255,0.36); background: rgba(120,150,255,0.14); }
-    .badge.yellow{ border-color: rgba(255,210,90,0.36); background: rgba(255,210,90,0.14); }
-
-    /* Footer */
-    footer{
-      padding: 26px 0 44px;
-      border-top: 1px solid var(--line);
-      margin-top: 26px;
-      color: var(--faint);
-      font-size: 13px;
-    }
-    .foot{
-      display: flex;
-      gap: 18px;
-      flex-wrap: wrap;
-      align-items: center;
-      justify-content: space-between;
-    }
-    .foot a{ color: var(--muted); }
-    .foot a:hover{ color: var(--text); text-decoration: none; }
-
-    /* Responsive */
-    @media (max-width: 920px){
-      .hero-grid{ grid-template-columns: 1fr; }
-      .brand{ min-width: auto; }
-    }
-    @media (max-width: 840px){
-      .span-7, .span-5{ grid-column: span 12; }
-      .nav{ justify-content: flex-start; }
-    }
-    @media (max-width: 520px){
-      .mini{ grid-template-columns: 1fr; }
-      .card-inner{ padding: 20px; }
-      .nav{ gap: 6px; }
-      .nav a{ padding: 7px 9px; }
-    }
+    .head{display:flex;justify-content:space-between;align-items:center;padding:.6rem 0;font-family:Inter,system-ui,sans-serif}
+    .brand{font-weight:600;letter-spacing:.04em;text-transform:uppercase;font-size:.8rem}
+    .meta{font-size:.75rem;color:var(--muted)}
+    .nav a{margin-left:1rem;font-size:.8rem}
+    main{padding:3rem 0}
+    h1{font-family:Inter,system-ui,sans-serif;font-size:2.6rem;margin:0 0 1rem}
+    .lede{color:var(--muted);max-width:60ch}
+    .toc{margin:3rem 0;border-top:1px solid var(--line);border-bottom:1px solid var(--line);padding:1.5rem 0}
+    .toc a{display:block;color:var(--ink);padding:.25rem 0}
+    .section{padding:4rem 0 3.5rem;border-bottom:1px solid var(--line)}
+    .num{font-family:Inter,system-ui,sans-serif;font-size:2.2rem;font-weight:600;color:var(--muted)}
+    .title{font-family:Inter,system-ui,sans-serif;font-size:1.6rem;font-weight:600;margin:.5rem 0}
+    .purpose{font-style:italic;color:var(--muted)}
+    footer{padding:3rem 0;color:var(--muted);font-size:.85rem}
   </style>
 </head>
-
 <body>
-  <a class="skip" href="#content">Skip to content</a>
-
-  <header class="topbar">
-    <div class="wrap">
-      <div class="topbar-inner">
-        <a class="brand" href="index.html" aria-label="Neighbourhood Signals home">
-          <div class="mark" aria-hidden="true">NS</div>
-          <div>
-            <h1>Neighbourhood Signals</h1>
-            <p>Public listening, safe by design</p>
-          </div>
-        </a>
-
-        <nav class="nav" aria-label="Primary">
-          <a class="active" aria-current="page" href="index.html">Home</a>
-          <a href="sprint.html">30-day sprint</a>
-          <a href="brief.html">Public Brief</a>
-          <a href="colours.html">Colours</a>
-          <a href="safety.html">Safety</a>
-          <a href="governance.html">Ethics and governance</a>
-          <a href="commissioning.html">Commissioning</a>
-          <a href="demo-brief.html">Demo Brief</a>
-          <a href="faqs.html">FAQs</a>
-          <a href="contact.html">Contact</a>
-        </nav>
+  <header>
+    <div class="wrap head">
+      <div>
+        <div class="brand">Neighbourhood Signals</div>
+        <div class="meta">v1.0 · Last updated <span id="updated"></span></div>
       </div>
+      <nav class="nav">
+        <a href="#contents">Contents</a>
+        <a href="#print" onclick="window.print()">Print / PDF</a>
+        <a href="mailto:hello@neighbourhoodcolab.co.uk">Contact</a>
+      </nav>
     </div>
   </header>
-
-  <main id="content">
-    <section class="hero">
-      <div class="wrap">
-        <div class="hero-grid">
-          <div class="card">
-            <div class="card-inner">
-              <div class="eyebrow"><span class="dot" aria-hidden="true"></span> The canonical reference</div>
-              <h2>Neighbourhood Signals is civic listening, made public, and made safe.</h2>
-              <p class="lead">
-                It turns aggregated navigation behaviour into a readable, public Neighbourhood Brief.
-                No personal data. No profiling. No private dashboards.
-                The first commitment is always the same, a 30-day listening sprint that creates the first Brief.
-              </p>
-
-              <div class="hero-actions">
-                <a class="btn primary" href="sprint.html">Start with the 30-day sprint</a>
-                <a class="btn" href="brief.html">Read about the Public Brief</a>
-                <a class="btn" href="demo-brief.html">See the demo Brief</a>
-              </div>
-
-              <div class="mini" role="list" aria-label="Core principles">
-                <div class="pill" role="listitem">
-                  <strong>The sprint is the birth mechanism</strong>
-                  <span>30 days. One Brief. Then decide what depth you want next.</span>
-                </div>
-                <div class="pill" role="listitem">
-                  <strong>The Brief is the unit of trust</strong>
-                  <span>Short, readable, public, and written to avoid overclaiming.</span>
-                </div>
-                <div class="pill" role="listitem">
-                  <strong>Publicness is a safety surface</strong>
-                  <span>Visibility prevents mission creep and hidden interpretation.</span>
-                </div>
-              </div>
-            </div>
-          </div>
-
-          <aside class="card side" aria-label="What this is and how it is adopted">
-            <div class="card-inner">
-              <h3>What it is</h3>
-              <p>A place-level listening layer that helps partners coordinate earlier, together.</p>
-
-              <ul class="list">
-                <li class="item">
-                  <div class="k">
-                    A public Neighbourhood Brief
-                    <span class="tag">the artefact</span>
-                  </div>
-                  <div class="v">A short civic document that makes patterns of need readable, shareable, and governable.</div>
-                </li>
-                <li class="item">
-                  <div class="k">
-                    A safe start
-                    <span class="tag">30 days</span>
-                  </div>
-                  <div class="v">A listening sprint with clear boundaries. No integration, no identity, no private dashboard layer.</div>
-                </li>
-                <li class="item">
-                  <div class="k">
-                    Commissioned as civic infrastructure
-                    <span class="tag">not software</span>
-                  </div>
-                  <div class="v">A small, repeatable civic capability with stewardship, cadence, and partner actions.</div>
-                </li>
-              </ul>
-
-              <div class="callout">
-                Neighbourhood CoLab CIC is the quiet delivery partner.
-                Neighbourhood Signals remains owned, governed, and shaped by the place.
-              </div>
-            </div>
-          </aside>
-        </div>
-      </div>
-    </section>
-
-    <section>
-      <div class="wrap">
-        <div class="grid">
-          <div class="block span-7">
-            <h3>What Neighbourhood Signals is</h3>
-            <p>
-              Neighbourhood Signals is a public, ethically bounded listening layer that converts aggregated navigation behaviour
-              into a shared view of need through the Neighbourhood Brief.
-            </p>
-            <p class="muted">
-              It sits underneath referrals, waiting lists, and acute pressure, in the layer where people hesitate, search,
-              loop, delay, and try to self-navigate. Those attempts contain early signal.
-            </p>
-            <div class="callout">
-              The goal is simple, we make reaching support easier than staying confused.
-            </div>
-          </div>
-
-          <div class="block span-5">
-            <h3>What it is not</h3>
-            <p>It is not surveillance. It is not scoring. It is not individual profiling.</p>
-            <p class="muted">
-              It does not identify people, infer identities, or label individuals.
-              If something requires personal data to be useful, it does not belong here.
-            </p>
-            <p class="muted">
-              It is written with metacognitive humility. Signals are clues, not conclusions.
-            </p>
-          </div>
-        </div>
-      </div>
-    </section>
-
-    <section>
-      <div class="wrap">
-        <div class="grid">
-          <div class="block span-7">
-            <h3>How it works</h3>
-            <p>
-              A lightweight listening layer captures aggregated patterns in what people are trying to find help with.
-              Those patterns are translated into a short Neighbourhood Brief that partners can read in minutes.
-            </p>
-            <p class="muted">
-              The point is coordination. Not reporting. Not performance management. Not a data product.
-            </p>
-
-            <div class="grid" style="margin-top: 12px;">
-              <div class="span-12" style="display:grid; gap: 10px;">
-                <div class="item">
-                  <div class="k">1. Listen safely <span class="tag">aggregate only</span></div>
-                  <div class="v">Capture patterns of navigation and intent, without identities, accounts, or personal data.</div>
-                </div>
-                <div class="item">
-                  <div class="k">2. Publish the Brief <span class="tag">unit of trust</span></div>
-                  <div class="v">Publish a public civic artefact. Short. Readable. Designed to resist overinterpretation.</div>
-                </div>
-                <div class="item">
-                  <div class="k">3. Respond together <span class="tag">gentle action</span></div>
-                  <div class="v">Agree simple partner actions that reduce loops, remove friction, and move support closer to where people are.</div>
-                </div>
-              </div>
-            </div>
-          </div>
-
-          <div class="block span-5">
-            <h3>Why the Brief is public</h3>
-            <p>
-              Publicness is a safety mechanism. It prevents hidden dashboards, private interpretation, and quiet mission creep.
-            </p>
-            <p class="muted">
-              When the Brief is public, the governance surface is visible.
-              It also helps partners align around the same shared reality, with the same language, at the same time.
-            </p>
-            <a class="btn" href="brief.html">Read about the Public Brief</a>
-          </div>
-        </div>
-      </div>
-    </section>
-
-    <section>
-      <div class="wrap">
-        <div class="grid">
-          <div class="block span-5">
-            <h3>Neighbourhood Colours</h3>
-            <p>
-              Colours are a blinding convention. They are not a risk scale.
-            </p>
-
-            <div class="colours" aria-label="Neighbourhood Colours">
-              <div class="colour">
-                <div class="row">
-                  <strong>Neighbourhood Blue</strong>
-                  <span class="badge blue">blinded band</span>
-                </div>
-                <div class="muted" style="font-size: 13px;">
-                  A clear pattern that something is forming. Enough to discuss and prepare, without naming where it is.
-                </div>
-              </div>
-
-              <div class="colour">
-                <div class="row">
-                  <strong>Neighbourhood Yellow</strong>
-                  <span class="badge yellow">blinded band</span>
-                </div>
-                <div class="muted" style="font-size: 13px;">
-                  A stronger or persistent pattern. Enough to plan a coordinated response, still blinded to place.
-                </div>
-              </div>
-            </div>
-
-            <div class="callout" style="margin-top: 12px;">
-              Geography stays masked until a governed unblinding moment, with the smallest necessary group.
-            </div>
-
-            <div style="margin-top: 12px;">
-              <a class="btn" href="colours.html">How Colours and unblinding work</a>
-            </div>
-          </div>
-
-          <div class="block span-7">
-            <h3>Why blinding matters</h3>
-            <p>
-              Most place-based data quickly turns into place-based judgement. Colours prevent that.
-            </p>
-            <p class="muted">
-              They keep the conversation in the right order: signal first, interpretation second, action third,
-              and only then location, when you genuinely need it to respond.
-            </p>
-            <div class="hero-actions">
-              <a class="btn" href="governance.html">Ethics and governance</a>
-              <a class="btn" href="safety.html">Safety by design</a>
-            </div>
-          </div>
-        </div>
-      </div>
-    </section>
-
-    <section>
-      <div class="wrap">
-        <div class="grid">
-          <div class="block span-12">
-            <h3>Safety is the architecture</h3>
-            <p>
-              Neighbourhood Signals is designed as civic infrastructure, not analytics.
-              Safety is not an afterthought, it is the system.
-            </p>
-            <p class="muted">
-              Core safeguards include: no personal data, no identity inference, no private dashboards, loop protection,
-              and a governance covenant. The Brief is written to avoid stigma and overclaiming, and to support proportionate response.
-            </p>
-            <div class="hero-actions">
-              <a class="btn" href="safety.html">Safety by design</a>
-              <a class="btn" href="governance.html">Ethics and governance</a>
-            </div>
-          </div>
-        </div>
-      </div>
-    </section>
-
-    <section>
-      <div class="wrap">
-        <div class="grid">
-          <div class="block span-7">
-            <h3>The 30-day listening sprint</h3>
-            <p>
-              The sprint is the first commitment and the first proof. A place listens for 30 days, publishes the first Brief, then decides what comes next.
-            </p>
-            <p class="muted">
-              No integration. No long contract. No hidden complexity.
-              Just a safe window into what the neighbourhood is already trying to tell you.
-            </p>
-            <div class="hero-actions">
-              <a class="btn primary" href="sprint.html">Sprint playbook</a>
-              <a class="btn" href="demo-brief.html">See the demo output</a>
-            </div>
-          </div>
-
-          <div class="block span-5">
-            <h3>Commissioning, in plain terms</h3>
-            <p>
-              After the sprint, commissioning is choosing the depth of listening and the cadence of response, with governance that stays simple because the Brief stays public.
-            </p>
-            <p class="muted">
-              Neighbourhood Signals is commissioned as a civic layer with clear tiers, stewarded locally, and designed to be copied by other places.
-            </p>
-            <a class="btn" href="commissioning.html">Commissioning pathway</a>
-          </div>
-        </div>
-      </div>
-    </section>
-
-    <section>
-      <div class="wrap">
-        <div class="card">
-          <div class="card-inner">
-            <div class="grid" style="align-items:center;">
-              <div class="span-7">
-                <h3 style="margin:0 0 8px; font-size: 20px;">If you can say yes to one thing, say yes to listening once.</h3>
-                <p style="margin:0; color: var(--muted); font-size: 14px;">
-                  A 30-day sprint creates your first public Neighbourhood Brief. From there, commissioning becomes a response to your own evidence,
-                  not a leap of faith.
-                </p>
-              </div>
-              <div class="span-5" style="display:flex; gap:10px; flex-wrap:wrap; justify-content:flex-end;">
-                <a class="btn primary" href="sprint.html">Run a sprint</a>
-                <a class="btn" href="brief.html">Understand the Brief</a>
-                <a class="btn" href="faqs.html">Read FAQs</a>
-                <a class="btn" href="contact.html">Contact</a>
-              </div>
-            </div>
-          </div>
-        </div>
-      </div>
-    </section>
-  </main>
-
-  <footer>
-    <div class="wrap">
-      <div class="foot">
-        <div>
-          <strong style="color: rgba(255,255,255,0.82);">Neighbourhood Signals</strong><br />
-          <span>Public listening, civic coordination, safe by design.</span>
-        </div>
-        <div style="display:flex; gap:12px; flex-wrap:wrap;">
-          <a href="sprint.html">30-day sprint</a>
-          <a href="brief.html">Public Brief</a>
-          <a href="safety.html">Safety</a>
-          <a href="governance.html">Ethics and governance</a>
-          <a href="commissioning.html">Commissioning</a>
-          <a href="contact.html">Contact</a>
-        </div>
-      </div>
-
-      <div style="margin-top: 16px; color: rgba(255,255,255,0.45); font-size: 12px;">
-        © <span id="year"></span> Neighbourhood Signals. Commissioned as civic infrastructure, not a private dashboard.
-      </div>
+  <main class="wrap">
+    <h1>Neighbourhood Signals</h1>
+    <p class="lede">A Civic Listening Framework. This is the canonical civic reference document.</p>
+    <div id="contents" class="toc">
+      <strong>Contents</strong>
+      <a href="#section-1">1. Purpose and Positioning</a>
+      <a href="#section-2">2. Scope and Non-Scope</a>
+      <a href="#section-3">3. Design Principles</a>
+      <a href="#section-4">4. The Neighbourhood Signal Model</a>
+      <a href="#section-5">5. Behavioural Aggregation and Anonymity</a>
+      <a href="#section-6">6. Interpretation and Accountability</a>
+      <a href="#section-7">7. Ethics, Power, and Civic Responsibility</a>
+      <a href="#section-8">8. Safety, Failure Modes, and Misuse Prevention</a>
+      <a href="#section-9">9. Information Governance and Legal Position</a>
+      <a href="#section-10">10. Governance and Stewardship</a>
+      <a href="#section-11">11. Commissioning and System Use</a>
+      <a href="#section-12">12. Financial Logic and Value</a>
+      <a href="#section-13">13. Measures of Success</a>
+      <a href="#section-14">14. Boundaries, Refusals, and Red Lines</a>
+      <a href="#section-15">15. Evolution Without Extraction</a>
+      <a href="#section-16">16. Closing Statement</a>
+      <a href="#appendix-a">Appendix A</a>
+      <a href="#appendix-b">Appendix B</a>
+      <a href="#appendix-c">Appendix C</a>
+      <a href="#appendix-d">Appendix D</a>
     </div>
-  </footer>
-
-  <script>
-    document.getElementById("year").textContent = new Date().getFullYear();
-  </script>
+    <!-- Sections will be poured here next -->
+    <div id="section-1" class="section"><div class="num">1</div><div class="title">Purpose and Positioning</div><div class="purpose">Why this framework exists and how it sits in the civic landscape.</div>
+<p>Neighbourhood Signals exists to make collective patterns of need, strain, and resilience visible at neighbourhood scale, without making individuals visible.</p>
+<p>Across health, local government, and the voluntary sector, systems are increasingly data-rich yet insight-poor. Vast quantities of individual-level data are collected, processed, and governed, while decision-makers still struggle to answer simple civic questions about what is rising, what is falling, and where pressure is forming before it becomes crisis.</p>
+<p>Neighbourhood Signals responds to this gap. It does not seek to know who people are, what they are doing, or why they are doing it. Instead, it provides a readable, shared account of what a neighbourhood is signalling, based on aggregated patterns of interaction with services and support.</p>
+<p>It is a civic listening layer. It sits between frontline services and strategic decision-making, translating diffuse behavioural signals into a form that can be read, discussed, and acted upon collectively.</p>
+<p>Its primary purpose is orientation, not optimisation.</p>
+</div><div class="title">Purpose and Positioning</div><div class="purpose">Why this framework exists and how it sits in the civic landscape.</div></div>
+    <div id="section-2" class="section"><div class="num">2</div><div class="title">Scope and Non-Scope</div><div class="purpose">What is included, excluded, and deliberately refused.</div>
+<p>This section defines what Neighbourhood Signals includes, what it excludes, and what it is deliberately not designed to do. Clear scope boundaries are a safety mechanism. They prevent drift, misuse, and misinterpretation.</p>
+<p>In scope are aggregated, neighbourhood-level patterns of help-seeking, navigation, and access behaviour. Signals are collective rather than individual, indicative rather than determinative, and concerned with change over time rather than isolated counts.</p>
+<p>Explicitly out of scope are any practices that identify, profile, score, or track individuals, any form of predictive risk modelling, clinical decision support, performance management of practitioners, or surveillance and compliance monitoring.</p>
+<p>Neighbourhood Signals does not ingest free-text clinical notes, personal identifiers, social media content, or passive digital exhaust. Where meaningful use would require personal data, the data is out of scope.</p>
+<p>Local adaptation is permitted only within these fixed boundaries. Flexibility does not extend to individual-level outputs, covert linkage, or predictive profiling.</p>
+</div><div class="title">Scope and Non-Scope</div><div class="purpose">What is included, excluded, and deliberately refused.</div></div>
+    <div id="section-3" class="section"><div class="num">3</div><div class="title">Design Principles</div><div class="purpose">Constitutional limits that constrain every choice.</div>
+<p>Neighbourhood Signals is governed by design principles that constrain every technical, organisational, and analytical choice. These principles exist to ensure that early understanding does not become early intrusion, and that visibility does not become control.</p>
+<p>Where there is tension between what could be learned and what should be learned, the framework defaults to restraint. Potential insight alone is not a justification for data use.</p>
+<p>Primary outputs are designed to be public-facing civic artefacts. Publicness prevents hidden interpretation layers and quiet expansion of scope.</p>
+<p>Aggregation is a safety boundary, not a processing step. No interpretation is produced until observations have been irreversibly combined at neighbourhood scale.</p>
+<p>Interpretation is always human, documented, and accountable. Automated conclusions and algorithmic recommendations are explicitly excluded.</p>
+<p>Change is deliberate, documented, and reversible. Rapid or silent expansion is treated as a governance failure.</p>
+</div><div class="title">Design Principles</div><div class="purpose">Constitutional limits that constrain every choice.</div></div>
+    <div id="section-4" class="section"><div class="num">4</div><div class="title">The Neighbourhood Signal Model</div><div class="purpose">How signals form and what they mean.</div>
+<p>A neighbourhood signal is formed when multiple, similar interactions, questions, or access attempts occur in a way that suggests a shared condition, friction, or emerging concern within a defined place.</p>
+<p>Signals are not single events. They are patterns that only become meaningful when seen collectively across time.</p>
+<p>Signals may arise from repeated attempts to navigate the same access routes, sustained confusion about eligibility or process, clustering of similar questions, or seasonal shifts in the kinds of help being sought.</p>
+<p>Signals are derived from interactions that already occur in everyday civic and care contexts. If a potential source requires identifying individuals to be useful, it is out of scope.</p>
+<p>Once aggregation and persistence thresholds are met, patterns are translated into a Neighbourhood Brief with narrative framing, uncertainty, and local context.</p>
+</div><div class="title">The Neighbourhood Signal Model</div><div class="purpose">How signals form and what they mean.</div></div>
+    <div id="section-5" class="section"><div class="num">5</div><div class="title">Behavioural Aggregation and Anonymity</div><div class="purpose">How individuals are kept out of scope.</div>
+<p>Aggregation is the primary safety boundary of Neighbourhood Signals. It is the mechanism by which individual lives are kept out of scope.</p>
+<p>All aggregation is designed to be irreversible. Once combined, individual records cannot be reconstructed, journeys cannot be inferred, and behaviour cannot be re-attributed.</p>
+<p>Local governance arrangements define conservative minimum thresholds to ensure that no individual, household, or recognisable subgroup can be singled out.</p>
+<p>Neighbourhood Signals does not maintain longitudinal records about identifiable people. Time is used only to understand neighbourhood-level change.</p>
+<p>Anonymity is treated as both a legal and social safeguard, reducing fear of judgement and allowing patterns to surface that might otherwise remain hidden.</p>
+</div><div class="title">Behavioural Aggregation and Anonymity</div><div class="purpose">How individuals are kept out of scope.</div></div>
+    <div id="section-6" class="section"><div class="num">6</div><div class="title">Interpretation and Accountability</div><div class="purpose">How meaning is made and who holds responsibility.</div>
+<p>Neighbourhood Signals is not designed to generate answers. It is designed to surface prompts for collective sense-making.</p>
+<p>Interpretation is always undertaken by people. There are no automated conclusions, no algorithmic recommendations, and no threshold-based actions.</p>
+<p>Interpretation is undertaken collectively by mixed groups that may include clinicians, local authority officers, voluntary sector partners, and neighbourhood representatives.</p>
+<p>Interpretations that contribute to a Neighbourhood Brief are documented in narrative form, including uncertainty and alternative readings.</p>
+<p>Accountability for any action informed by a signal remains with the responsible professional or organisation. The framework does not displace statutory duties.</p>
+</div><div class="title">Interpretation and Accountability</div><div class="purpose">How meaning is made and who holds responsibility.</div></div>
+    <div id="section-7" class="section"><div class="num">7</div><div class="title">Ethics, Power, and Civic Responsibility</div><div class="purpose">The moral posture of early understanding.</div>
+<p>Early visibility is not neutral. To see emerging need before it becomes formal demand is to acquire moral responsibility.</p>
+<p>Public institutions hold structural power over resources and narrative. Neighbourhood Signals is designed to avoid deepening this asymmetry by surfacing signals as shared civic artefacts rather than private managerial tools.</p>
+<p>Although personal data is not processed, the framework recognises a civic form of consent grounded in transparency, clarity of use, and visible refusals.</p>
+<p>Narrative framing within Neighbourhood Briefs avoids stigma and blame. Signals describe conditions, not character.</p>
+<p>The framework preserves ethical refusal where publication would stigmatise a recognisable community, enable coercive action, or encourage disproportionate response.</p>
+</div><div class="title">Ethics, Power, and Civic Responsibility</div><div class="purpose">The moral posture of early understanding.</div></div>
+    <div id="section-8" class="section"><div class="num">8</div><div class="title">Safety, Failure Modes, and Misuse Prevention</div><div class="purpose">Foreseeable risks and safeguards.</div>
+<p>Neighbourhood Signals recognises foreseeable risks including over-interpretation, stigmatising narratives, function creep, hidden decision layers, and political or media misuse.</p>
+<p>Structural safeguards include public Neighbourhood Briefs, explicit narrative framing, fixed aggregation thresholds, human-in-the-loop interpretation, and documented governance decisions.</p>
+<p>Local governance arrangements define graduated responses linked to the strength and persistence of signals. Weak signals warrant observation and discussion, not escalation.</p>
+<p>Where a Brief is believed to have caused harm or misinterpretation, rapid review, amendment, or withdrawal mechanisms must exist.</p>
+<p>Safety arrangements are subject to periodic audit and formal sign-off for material changes.</p>
+</div><div class="title">Safety, Failure Modes, and Misuse Prevention</div><div class="purpose">Foreseeable risks and safeguards.</div></div>
+    <div id="section-9" class="section"><div class="num">9</div><div class="title">Information Governance and Legal Position</div><div class="purpose">How the framework remains lawful and trusted.</div>
+<p>Neighbourhood Signals is designed to operate without processing personal data. Signals are formed only from aggregated, irreversible combinations of observations such that individuals are not identifiable or reasonably likely to be identifiable.</p>
+<p>Because personal data is not processed, the framework does not rely on individual consent or other personal data lawful bases. However, it aligns with the principles of fairness, transparency, purpose limitation, and data minimisation.</p>
+<p>Neighbourhood Briefs and governance records are managed as formal civic records, versioned and retained in line with local records management policies.</p>
+<p>Local governance arrangements provide named accountability for information governance, documented aggregation thresholds, and documented interpretation processes.</p>
+<p>Transparency about boundaries and refusals is treated as a core component of lawful operation.</p>
+</div><div class="title">Information Governance and Legal Position</div><div class="purpose">How the framework remains lawful and trusted.</div></div>
+    <div id="section-10" class="section"><div class="num">10</div><div class="title">Governance and Stewardship</div><div class="purpose">Who holds this and how.</div>
+<p>Governance within Neighbourhood Signals exists to protect trust, constrain power, and ensure that early visibility remains a civic good rather than a managerial tool.</p>
+<p>The framework is stewarded rather than owned. Stewardship implies responsibility for restraint, proportionality, transparency, and continuity.</p>
+<p>Each neighbourhood establishes a local stewardship group including health and care leaders, local authority representatives, voluntary sector partners, and neighbourhood representatives.</p>
+<p>No single organisation may exercise unilateral control over interpretation or publication. Governance decisions are recorded, reviewable, and subject to audit.</p>
+<p>Clear routes exist for raising concerns, challenging interpretations, and requesting review or withdrawal of Briefs.</p>
+</div><div class="title">Governance and Stewardship</div><div class="purpose">Who holds this and how.</div></div>
+    <div id="section-11" class="section"><div class="num">11</div><div class="title">Commissioning and System Use</div><div class="purpose">How it is adopted and used legitimately.</div>
+<p>Commissioning within Neighbourhood Signals is the act of choosing to listen. It is a civic commitment rather than the purchase of a software product.</p>
+<p>What is commissioned is a cadence of listening, stewardship arrangements, the production of Neighbourhood Briefs, and the governance structures that hold them.</p>
+<p>Neighbourhood Signals may be used to inform access design, shape communications, support preventative work, and improve coordination across organisations.</p>
+<p>It may not be used to target individuals, enforce compliance, ration care, or replace professional assessment.</p>
+<p>Commissioning arrangements are time-limited, reviewed periodically, and renewed based on continued trust and usefulness.</p>
+</div><div class="title">Commissioning and System Use</div><div class="purpose">How it is adopted and used legitimately.</div></div>
+    <div id="section-12" class="section"><div class="num">12</div><div class="title">Financial Logic and Value</div><div class="purpose">Why it is proportionate and valuable.</div>
+<p>Most public expenditure related to need is incurred once problems have escalated into formal demand, crisis, or statutory intervention. Late visibility contributes to higher unit costs and reduced options for proportionate response.</p>
+<p>Neighbourhood Signals addresses cost indirectly by supporting earlier understanding rather than later reaction.</p>
+<p>The framework operates with low marginal cost because it relies on existing interaction pathways and avoids intensive data collection and heavy analytical infrastructure.</p>
+<p>The principal value created is clarity about emerging patterns, misalignment between need and access, and where communication or design changes could reduce friction.</p>
+<p>Signals are not linked to activity targets, payment incentives, or punitive regimes, preventing perverse incentives.</p>
+</div><div class="title">Financial Logic and Value</div><div class="purpose">Why it is proportionate and valuable.</div></div>
+    <div id="section-13" class="section"><div class="num">13</div><div class="title">Measures of Success</div><div class="purpose">How success is understood.</div>
+<p>Success is understood primarily as improved shared understanding rather than increased activity.</p>
+<p>Indicators of success may include clearer neighbourhood-level narratives of emerging need, reduced confusion in access routes, and improved alignment between communication, design, and lived experience.</p>
+<p>Neighbourhood Signals privileges qualitative indicators including partner feedback, clarity of interpretation within Briefs, and evidence of shared sense-making across organisations.</p>
+<p>The framework deliberately avoids measuring individual outcomes, practitioner performance, compliance rates, or predictive accuracy.</p>
+<p>Learning is documented through periodic reflective reviews that inform governance and stewardship practice.</p>
+</div><div class="title">Measures of Success</div><div class="purpose">How success is understood.</div></div>
+    <div id="section-14" class="section"><div class="num">14</div><div class="title">Boundaries, Refusals, and Red Lines</div><div class="purpose">What will never be allowed.</div>
+<p>Neighbourhood Signals will not be used to identify, track, or profile individuals, generate risk or vulnerability scores, automate decisions, support enforcement, or create private dashboards.</p>
+<p>Even where technically feasible, the framework refuses to publish signals that would stigmatise recognisable communities, enable coercive action, or encourage disproportionate response.</p>
+<p>Listening must pause where trust has been materially damaged, governance has failed, or outputs are being misused.</p>
+<p>Expansion of scope is not considered success. Preserving trust, clarity, and restraint is.</p>
+</div><div class="title">Boundaries, Refusals, and Red Lines</div><div class="purpose">What will never be allowed.</div></div>
+    <div id="section-15" class="section"><div class="num">15</div><div class="title">Evolution Without Extraction</div><div class="purpose">How it grows without drift.</div>
+<p>Neighbourhood Signals may evolve through slow, deliberate change that is publicly documented and reversible.</p>
+<p>Learning occurs through reflective review of Briefs, feedback from stewardship groups, and shared cross-neighbourhood learning. It does not occur through expanded individual data capture.</p>
+<p>No single organisation may claim ownership of aggregated signals, learning, or methodology. The framework remains civic infrastructure.</p>
+<p>The pace and direction of evolution are constrained by neighbourhood trust. Where trust is at risk, evolution must pause.</p>
+</div><div class="title">Evolution Without Extraction</div><div class="purpose">How it grows without drift.</div></div>
+    <div id="section-16" class="section"><div class="num">16</div><div class="title">Closing Statement</div><div class="purpose">The civic anchor.</div>
+<p>Neighbourhood Signals exists because modern public systems have become skilled at responding to pressure and less able to see what is quietly forming.</p>
+<p>It proposes that earlier understanding can be developed without earlier intrusion, that neighbourhood-scale listening can exist without surveillance, and that public, shared interpretation can replace hidden analytic power.</p>
+<p>The framework is intentionally modest. It does not promise prediction, optimisation, or control. It offers the ability to listen together, earlier, and to hold what is heard with responsibility.</p>
+<p>Neighbourhoods are not datasets, and people are not variables. They are contexts of life, care, uncertainty, and meaning.</p>
+<p>This document sets the terms under which Neighbourhood Signals may be used, adapted, and scrutinised.</p>
+</div><div class="title">Closing Statement</div><div class="purpose">The civic anchor.</div></div>
+    <div id="appendix-a" class="section"><div class="num">A</div><div class="title">Appendix A – Example Neighbourhood Brief</div><div class="purpose">A worked example of the civic artefact.</div>
+<p><strong>Neighbourhood:</strong> Weymouth and Portland<br><strong>Period:</strong> Late winter</p>
+<p><strong>Observed patterns.</strong> Sustained increase in attempts to access same-day primary care advice. Repeated confusion around proxy access and digital routes. Rising search behaviour linked to family illness and work absence.</p>
+<p><strong>Context.</strong> Seasonal illness, reduced daylight, and transport disruption coincide with these patterns.</p>
+<p><strong>Interpretive notes.</strong> These signals suggest navigation friction and uncertainty are contributing to rising pressure before formal appointments.</p>
+<p><strong>Open questions.</strong> Are current access routes clearly signposted. Is reassurance and early guidance reaching families effectively.</p>
+</div><div class="title">Appendix A</div><div class="purpose">Example Neighbourhood Brief.</div></div>
+    <div id="appendix-b" class="section"><div class="num">B</div><div class="title">Appendix B – Common Objections and Responses</div><div class="purpose">Formal responses to foreseeable concerns.</div>
+<p><strong>Is this surveillance.</strong> No. It operates only on aggregated, non-identifiable patterns and produces public civic artefacts.</p>
+<p><strong>Is this AI-driven triage.</strong> No. It does not make or recommend decisions.</p>
+<p><strong>Does this replace professional judgement.</strong> No. It supports shared understanding, not automated action.</p>
+</div><div class="title">Appendix B</div><div class="purpose">Common Objections and Responses.</div></div>
+    <div id="appendix-c" class="section"><div class="num">C</div><div class="title">Appendix C – Glossary</div><div class="purpose">Key terms used in this framework.</div>
+<p><strong>Aggregation.</strong> Irreversible combination of observations to prevent identification.</p>
+<p><strong>Brief.</strong> The public artefact summarising neighbourhood-level signals.</p>
+<p><strong>Signal.</strong> A repeated pattern suggesting change at neighbourhood scale.</p>
+<p><strong>Stewardship.</strong> Ethical responsibility to hold, interpret, and constrain signals.</p>
+</div><div class="title">Appendix C</div><div class="purpose">Glossary.</div></div>
+    <div id="appendix-d" class="section"><div class="num">D</div><div class="title">Appendix D – Ethical Lineage</div><div class="purpose">Foundational ethical traditions.</div>
+<p>Neighbourhood Signals draws on traditions of public health ethics, community development, and data minimisation that prioritise dignity, proportionality, and transparency.</p>
+<p>It reflects principles of restraint, collective sense-making, and civic stewardship found in community health, local governance, and participatory design traditions.</p>
+</div><div class="title">Appendix D</div><div class="purpose">Ethical Lineage.</div></div>
+    <footer>
+      <p>Neighbourhood CoLab C.I.C · <a href="mailto:hello@neighbourhoodcolab.co.uk">hello@neighbourhoodcolab.co.uk</a></p>
+      <p>This is a civic reference document.</p>
+    </footer>
+  </main>
+  <script>document.getElementById('updated').textContent = new Date().toLocaleDateString();</script>
 </body>
 </html>
